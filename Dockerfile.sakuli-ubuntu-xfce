@@ -22,6 +22,8 @@ ENV DISPLAY=:1 \
     NO_VNC_PORT=6901
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
+ARG LICENSE_TOKEN
+ARG NPM_TOKEN
 ### Envrionment config
 ENV HOME=/headless \
     TERM=xterm \
@@ -32,7 +34,9 @@ ENV HOME=/headless \
     VNC_COL_DEPTH=24 \
     VNC_RESOLUTION=1280x1024 \
     VNC_PW=vncpassword \
-    VNC_VIEW_ONLY=false
+    VNC_VIEW_ONLY=false \
+    SAKULI_LICENSE_TOKEN=$LICENSE_TOKEN \
+    NPM_TOKEN=$NPM_TOKEN
 WORKDIR $HOME
 
 ### Add all install scripts for further steps
