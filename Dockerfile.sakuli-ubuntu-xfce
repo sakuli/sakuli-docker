@@ -34,7 +34,7 @@ ENV HOME=/headless \
     VNC_PW=vncpassword \
     VNC_VIEW_ONLY=false \
     NPM_TOKEN=REPLACE_WITH_YOUR_NPM_TOKEN \
-    IMG=consol/sakuli
+    IMG=taconsol/sakuli
 WORKDIR $HOME
 
 ### Add all install scripts for further steps
@@ -89,7 +89,7 @@ ARG SAKULI_VERSION=2.1.2
 ### Attention: Do not rename these two ARGS to (CHROMEDRIVER|GECKODRIVER)_VERSION.
 ### Doing so will cause the installation to fail, since it overrides the actual package version and results in a 404
 ARG CHROMEDRIVER=76
-ARG GECKODRIVER=1.16.8
+ARG GECKODRIVER=1.16.2
 ARG NPM_ACCESS_TOKEN
 RUN $INST_SCRIPTS/sakuli.sh $NODE_VERSION $SAKULI_VERSION $CHROMEDRIVER $GECKODRIVER $NPM_ACCESS_TOKEN
 
