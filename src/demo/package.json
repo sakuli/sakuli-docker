@@ -1,0 +1,11 @@
+{
+  "name": "sakuli_demo",
+  "version": "1.0.0",
+  "description": "A simple Sakuli demo showcase",
+  "main": "index.js",
+  "scripts": {
+    "test": "sakuli run ./suite"
+  },
+  "author": "",
+  "license": "ISC"
+}
