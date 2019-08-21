@@ -6,6 +6,20 @@ file:
     group: root
     filetype: file
     contains: []
+  /dockerstartup/startup.sh:
+    exists: true
+    mode: "0777"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
+  /dockerstartup/sakuli_startup.sh:
+    exists: true
+    mode: "0777"
+    owner: root
+    group: root
+    filetype: file
+    contains: []
   /headless/wm_startup.sh:
     exists: true
     mode: "0777"
@@ -13,15 +27,32 @@ file:
     group: root
     filetype: file
     contains: []
+package:
+  firefox:
+    installed: true
+  chromium-browser:
+    installed: true
+  build-essential:
+    installed: true
+  wget:
+    installed: true
+  locales:
+    installed: true
+  libxtst-dev:
+    installed: true
+  gnome-calculator:
+    installed: true
+  xfce4-screenshooter:
+    installed: true
 port:
   tcp:5901:
     listening: true
     ip:
-    - 0.0.0.0
+      - 0.0.0.0
   tcp:6901:
     listening: true
     ip:
-    - 0.0.0.0
+      - 0.0.0.0
 process:
   Xvnc:
     running: true

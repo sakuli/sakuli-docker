@@ -1,0 +1,9 @@
+port:
+  tcp:6901:
+    listening: true
+    ip:
+    - 0.0.0.0
+  tcp:5901:
+    listening: true
+    ip:
+    - 0.0.0.0
