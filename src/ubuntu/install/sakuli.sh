@@ -20,6 +20,9 @@ npm i -g chromedriver@$3
 echo "Installing GeckoDriver v$4"
 npm i -g geckodriver@$4
 
+echo "Installing yargs"
+npm i -g yargs
+
 forwarders=("gearman" "checkmk" "icinga2")
 for fwd in "${forwarders[@]}"
 do
