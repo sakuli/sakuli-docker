@@ -6,10 +6,10 @@ FROM ubuntu:$BASE_IMAGE_VERSION
 
 LABEL maintainer="simon.hofmann@consol.de"
 
-ENV REFRESHED_AT 2019-06-12
+ENV REFRESHED_AT 2019-08-21
 
-LABEL io.k8s.description="Headless VNC Container with Xfce window manager" \
-    io.k8s.display-name="Headless VNC Container based on Ubuntu" \
+LABEL io.k8s.description="Sakuli Test Container with Xfce window manager" \
+    io.k8s.display-name="Sakuli Test Container based on Ubuntu" \
     io.openshift.expose-services="6901:http,5901:xvnc" \
     io.openshift.tags="vnc, ubuntu, xfce" \
     io.openshift.non-scalable=true
@@ -22,8 +22,6 @@ ENV DISPLAY=:1 \
     NO_VNC_PORT=6901
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
-ARG LICENSE_TOKEN
-ARG NPM_TOKEN
 ### Envrionment config
 ENV HOME=/headless \
     TERM=xterm \
@@ -35,14 +33,17 @@ ENV HOME=/headless \
     VNC_RESOLUTION=1280x1024 \
     VNC_PW=vncpassword \
     VNC_VIEW_ONLY=false \
-    SAKULI_LICENSE_TOKEN=$LICENSE_TOKEN \
-    NPM_TOKEN=$NPM_TOKEN
+    NPM_TOKEN=REPLACE_WITH_YOUR_NPM_TOKEN \
+    IMG=consol/sakuli
 WORKDIR $HOME
 
 ### Add all install scripts for further steps
 ADD ./src/common/install/ $INST_SCRIPTS/
 ADD ./src/ubuntu/install/ $INST_SCRIPTS/
 RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
+
+### Add env scripts for startup
+ADD ./src/common/env/ $STARTUPDIR/env
 
 ### Install some common tools
 RUN $INST_SCRIPTS/tools.sh
@@ -89,9 +90,9 @@ ARG SAKULI_VERSION=2.1.0
 ### Doing so will cause the installation to fail, since it overrides the actual package version and results in a 404
 ARG CHROMEDRIVER=74
 ARG GECKODRIVER=1.16.2
-RUN $INST_SCRIPTS/sakuli.sh $NODE_VERSION $SAKULI_VERSION $CHROMEDRIVER $GECKODRIVER
+ARG NPM_ACCESS_TOKEN
+RUN $INST_SCRIPTS/sakuli.sh $NODE_VERSION $SAKULI_VERSION $CHROMEDRIVER $GECKODRIVER $NPM_ACCESS_TOKEN
 
 RUN $INST_SCRIPTS/startup.sh
 
-ENTRYPOINT ["/dockerstartup/vnc_startup.sh"]
-CMD ["--wait"]
+ENTRYPOINT ["/dockerstartup/startup.sh"]
