@@ -57,9 +57,9 @@ RUN $INST_SCRIPTS/tigervnc.sh
 RUN $INST_SCRIPTS/no_vnc.sh
 
 ### Install firefox and chrome browser
-ARG FIREFOX_VERSION=67.0.2+build2-0ubuntu0.18.04.1
+ARG FIREFOX_VERSION=68.0.2+build1-0ubuntu0.18.04.1
 RUN $INST_SCRIPTS/firefox.sh $FIREFOX_VERSION
-ARG CHROMIUM_VERSION=74.0.3729.169-0ubuntu0.18.04.1
+ARG CHROMIUM_VERSION=76.0.3809.100-0ubuntu0.18.04.1
 RUN $INST_SCRIPTS/chrome.sh $CHROMIUM_VERSION
 
 ### Install xfce UI
@@ -85,11 +85,11 @@ RUN $INST_SCRIPTS/nvm.sh $NODE_VERSION
 
 ### Install Sakuli
 ARG NODE_VERSION=lts/dubnium
-ARG SAKULI_VERSION=2.1.0
+ARG SAKULI_VERSION=2.1.2
 ### Attention: Do not rename these two ARGS to (CHROMEDRIVER|GECKODRIVER)_VERSION.
 ### Doing so will cause the installation to fail, since it overrides the actual package version and results in a 404
-ARG CHROMEDRIVER=74
-ARG GECKODRIVER=1.16.2
+ARG CHROMEDRIVER=76
+ARG GECKODRIVER=1.16.8
 ARG NPM_ACCESS_TOKEN
 RUN $INST_SCRIPTS/sakuli.sh $NODE_VERSION $SAKULI_VERSION $CHROMEDRIVER $GECKODRIVER $NPM_ACCESS_TOKEN
 
