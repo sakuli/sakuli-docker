@@ -86,12 +86,8 @@ RUN $INST_SCRIPTS/nvm.sh $NODE_VERSION
 ### Install Sakuli
 ARG NODE_VERSION=lts/dubnium
 ARG SAKULI_VERSION=2.1.3
-### Attention: Do not rename these two ARGS to (CHROMEDRIVER|GECKODRIVER)_VERSION.
-### Doing so will cause the installation to fail, since it overrides the actual package version and results in a 404
-ARG CHROMEDRIVER=76
-ARG GECKODRIVER=1.16.2
 ARG NPM_ACCESS_TOKEN
-RUN $INST_SCRIPTS/sakuli.sh $NODE_VERSION $SAKULI_VERSION $CHROMEDRIVER $GECKODRIVER $NPM_ACCESS_TOKEN
+RUN $INST_SCRIPTS/sakuli.sh $NODE_VERSION $SAKULI_VERSION $NPM_ACCESS_TOKEN
 
 RUN $INST_SCRIPTS/startup.sh
 
