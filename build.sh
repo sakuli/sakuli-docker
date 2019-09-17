@@ -1,9 +1,9 @@
 #!/bin/bash
 
 docker build \
--t taconsol/sakuli:2.1.2 \
+-t taconsol/sakuli:2.1.3 \
 -f Dockerfile.sakuli-ubuntu-xfce . \
---build-arg=SAKULI_VERSION=2.1.2 \
+--build-arg=SAKULI_VERSION=2.1.3 \
 --build-arg=FIREFOX_VERSION=69.0+build2-0ubuntu0.18.04.1 \
 --build-arg=CHROMIUM_VERSION=76.0.3809.100-0ubuntu0.18.04.1 \
 --build-arg=CHROMEDRIVER=76 \
