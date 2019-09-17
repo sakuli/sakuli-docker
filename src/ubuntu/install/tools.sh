@@ -4,7 +4,7 @@ set -e
 
 echo "Install some common tools for further installation"
 apt-get update
-apt-get install -y build-essential wget locales libxtst-dev gnome-calculator xfce4-screenshooter -y
+apt-get install -y build-essential wget locales libxtst-dev gnome-calculator xfce4-screenshooter git -y
 
 echo "Generate locale for en_US.UTF-8"
 locale-gen en_US.UTF-8
