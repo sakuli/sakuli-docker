@@ -17,8 +17,8 @@ npm i -g @sakuli/cli@$2
 forwarders=("gearman" "checkmk" "icinga2")
 for fwd in "${forwarders[@]}"
 do
-    echo "Installing Sakuli forwarder $fwd"
-    npm i -g @sakuli/forwarder-$fwd
+    echo "Installing Sakuli forwarder $fwd@next"
+    npm i -g @sakuli/forwarder-$fwd@next
 done
 
 echo "Configuring .npmrc"
