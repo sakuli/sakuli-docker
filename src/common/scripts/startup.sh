@@ -2,13 +2,7 @@
 set -e
 
 main() {
-	# If arg 1 is not npm, execute as it is.
-	if [[ $1 =~ npm ]]; then
-        $STARTUPDIR/sakuli_startup.sh "$@"
-	else
-		# execute any other command, init VNC anyway
-		$STARTUPDIR/vnc_startup.sh "$@"
-	fi
+	$STARTUPDIR/sakuli_startup.sh "$@"
 }
 
 if [ $# -gt 0 ]; then
