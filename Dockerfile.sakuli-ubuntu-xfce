@@ -33,6 +33,7 @@ ENV HOME=/headless \
     VNC_RESOLUTION=1280x1024 \
     VNC_PW=vncpassword \
     VNC_VIEW_ONLY=false \
+    NODE_NO_WARNINGS=1 \
     NPM_TOKEN=REPLACE_WITH_YOUR_NPM_TOKEN \
     IMG=taconsol/sakuli
 WORKDIR $HOME
