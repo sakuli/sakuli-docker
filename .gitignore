@@ -4,3 +4,4 @@ target
 *.log
 **/node_modules
 **/dist
+src/common/env
