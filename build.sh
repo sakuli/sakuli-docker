@@ -1,5 +1,11 @@
 #!/bin/bash
 
+npm --prefix ./license-validator ci
+rm -rf ./src/common/env
+mkdir -p ./src/common/env
+cp -rf ./license-validator/dist/index.js ./src/common/env/startup.js
+cp -rf ./license-validator/node_modules ./src/common/env/node_modules
+
 docker build \
 -t taconsol/sakuli:2.1.3 \
 -f Dockerfile.sakuli-ubuntu-xfce . \
