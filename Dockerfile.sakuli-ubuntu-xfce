@@ -6,7 +6,7 @@ FROM ubuntu:$BASE_IMAGE_VERSION
 
 LABEL maintainer="simon.hofmann@consol.de"
 
-ENV REFRESHED_AT 2019-08-21
+ENV REFRESHED_AT 2019-09-18
 
 LABEL io.k8s.description="Sakuli Test Container with Xfce window manager" \
     io.k8s.display-name="Sakuli Test Container based on Ubuntu" \
