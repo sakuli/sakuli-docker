@@ -5,8 +5,8 @@
   "main": "./dist/index.js",
   "scripts": {
     "obfuscate": "javascript-obfuscator ./dist --output ./out --config ./scripts/obfuscate.js",
-    "copy": "node ./scripts/move-files.js ./out .",
-    "clean": "node ./scripts/remove-file.js ./out",
+    "copy": "cp-cli ./out .",
+    "clean": "rimraf ./out",
     "build": "tsc",
     "build:release": "tsc && npm run obfuscate && npm run copy && npm run clean",
     "postinstall": "npm run build:release"
@@ -20,8 +20,10 @@
   },
   "devDependencies": {
     "@types/node": "^12.7.2",
-    "typescript": "^3.5.3",
+    "cp-cli": "^2.0.0",
     "fs-extra": "^8.1.0",
-    "javascript-obfuscator": "^0.18.1"
+    "javascript-obfuscator": "^0.18.1",
+    "rimraf": "^3.0.0",
+    "typescript": "^3.5.3"
   }
 }
