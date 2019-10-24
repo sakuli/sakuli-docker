@@ -4,9 +4,11 @@ set -e
 
 echo "Install Chromium Browser"
 apt-get update -y
-apt-get install -y chromium-browser=$1 chromium-chromedriver=$1 chromium-browser-l10n=$1 chromium-codecs-ffmpeg=$1
+apt-get install -y chromium-browser chromium-chromedriver chromium-browser-l10n chromium-codecs-ffmpeg
 ln -s /usr/bin/chromium-browser /usr/bin/google-chrome
 echo "CHROMIUM_FLAGS='--no-sandbox --user-data-dir'" > $HOME/.chromium-browser.init
+echo "Install FireFox Browser"
+apt-get install -y firefox firefox-geckodriver
 apt-get clean -y
 apt-get autoremove -y
-rm -rf /var/lib/apt/lists/*
+rm -rf /var/lib/apt/lists/* /var/cache/apt/*

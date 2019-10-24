@@ -7,3 +7,4 @@ apt-get update -y
 apt-get install -y libnss-wrapper gettext
 apt-get clean -y
 apt-get autoremove -y
+rm -rf /var/lib/apt/lists/* /var/cache/apt/*

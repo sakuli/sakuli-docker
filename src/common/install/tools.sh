@@ -10,3 +10,4 @@ echo "Generate locale for en_US.UTF-8"
 locale-gen en_US.UTF-8
 apt-get clean -y
 apt-get autoremove -y
+rm -rf /var/lib/apt/lists/* /var/cache/apt/*
