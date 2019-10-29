@@ -49,6 +49,7 @@ RUN $INST_SCRIPTS/setup.sh
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 ADD ./src/common/wm/ $HOME/
+ADD ./src/common/config/ /etc/xdg/
 
 ### Copy demo testcase
 ADD ./src/demo $HOME/demo_testcase
