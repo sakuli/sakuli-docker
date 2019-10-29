@@ -10,10 +10,10 @@ function install {
     done
 }
 
-apt-get update
-apt-get upgrade
+apt-get update -y
+apt-get upgrade -y
 echo "===> Installing common tools"
-install wget locales gnome-calculator xfce4-screenshooter git
+install wget locales gnome-calculator xfce4-screenshooter git feh
 
 echo "===> Installing nut.js dependencies"
 install build-essential libxtst-dev
