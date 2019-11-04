@@ -16,4 +16,4 @@
 #
 #xfce-mcs-manager &
 
-feh --bg-center /headless/bg.png &
+nitrogen --set-centered /headless/bg.png &
