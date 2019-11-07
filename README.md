@@ -19,7 +19,7 @@ provided functionality.
 | set_version.sh | Sets the version of the project. Should always match the Sakuli version used.| 
 
 #### Sakuli license
-To use the scripts, it is required to set an environment variable named `SAKULI_LICENSE` containing a valid Sakuli
-licence of the M package at least. To obtain such a license, please visit the
+To use these scripts, it is required to set the [`SAKULI_LICENSE_KEY` environment variable](https://sakuli.io/docs/enterprise/)
+containing a valid Sakuli license of size M or above. To obtain such a license, please visit the
 [Sakuli license](https://confluence.consol.de/x/zwBoBw) page in confluence and choose one of the licenses for internal
 use.
