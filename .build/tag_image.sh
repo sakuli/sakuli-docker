@@ -11,7 +11,7 @@ if [[ $SRC_TAG == "" ]] || [[ $TARGET_TAG == "" ]] ; then
 fi
 
 IMAGES=(
-	"sakuli/sakuli-ubuntu-xfce"
+	"taconsol/sakuli"
 )
 
 #Loop
