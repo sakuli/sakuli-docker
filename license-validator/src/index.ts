@@ -15,7 +15,7 @@ try {
     process.exit(0);
 } catch (e) {
     console.warn(
-        chalk`{red Failed to validate container runtime ${getImageName()}. Reason: ${e}}`
+        chalk`{red Failed to validate container runtime ${getImageName()}. ${e}}`
     );
     process.exit(-1);
 }
