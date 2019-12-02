@@ -30,7 +30,11 @@ file:
 package:
   firefox:
     installed: true
+  firefox-geckodriver:
+    installed: true
   chromium-browser:
+    installed: true
+  chromium-chromedriver:
     installed: true
   build-essential:
     installed: true
