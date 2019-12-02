@@ -38,9 +38,6 @@ ENV HOME=/headless \
     IMG=taconsol/sakuli
 WORKDIR $HOME
 
-### Copy env scripts for startup
-COPY ./src/common/env/ $STARTUPDIR/env
-
 ### Copy all install scripts for further steps
 COPY ./src/common/install/ $INST_SCRIPTS/
 RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
@@ -50,6 +47,12 @@ ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 COPY ./src/common/wm/ $HOME/
 COPY ./src/common/config/ /etc/xdg/
+
+### Copy env scripts for startup
+COPY ./src/common/env/ $STARTUPDIR/env
+
+COPY ./src/common/firefox_profile/ $HOME/.mozilla/
+COPY ./src/common/chrome_certificate_store/ $HOME/.pki/
 
 ### Copy demo testcase
 COPY ./src/demo $HOME/demo_testcase
