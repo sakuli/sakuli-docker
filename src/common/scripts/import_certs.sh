@@ -2,10 +2,10 @@
 
 ### Script installs root.cert.pem to certificate trust store of applications using NSS
 
-if [ -z ${SAKULI_TRUSTED_CA_DIR+x} ]; then
+if [ -z ${SAKULI_TRUSTED_CERT_DIR+x} ]; then
     echo "NO CERTIFICATES PATH FOR IMPORT SET, SKIPPING"
 else
-    for cert in $SAKULI_TRUSTED_CA_DIR/*.{cer,crt,pem}; do
+    for cert in $SAKULI_TRUSTED_CERT_DIR/*.{cer,crt,pem}; do
         certfile=$(basename $cert)
         certname="${certfile%%.*}"
 
