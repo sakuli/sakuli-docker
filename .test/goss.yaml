@@ -48,6 +48,8 @@ package:
     installed: true
   xfce4-screenshooter:
     installed: true
+  libnss3-tools:
+    installed: true
 port:
   tcp:5901:
     listening: true
