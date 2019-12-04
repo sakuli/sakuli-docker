@@ -6,3 +6,5 @@ target
 **/dist
 src/common/env
 .DS_Store
+src/demo/suite/_logs/
+src/demo/suite/test/.sakuli_io.js.steps.cache
