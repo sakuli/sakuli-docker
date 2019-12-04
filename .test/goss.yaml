@@ -30,7 +30,11 @@ file:
 package:
   firefox:
     installed: true
+  firefox-geckodriver:
+    installed: true
   chromium-browser:
+    installed: true
+  chromium-chromedriver:
     installed: true
   build-essential:
     installed: true
@@ -43,6 +47,8 @@ package:
   gnome-calculator:
     installed: true
   xfce4-screenshooter:
+    installed: true
+  libnss3-tools:
     installed: true
 port:
   tcp:5901:

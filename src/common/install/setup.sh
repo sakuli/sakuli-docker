@@ -15,6 +15,9 @@ apt-get upgrade -y
 echo "===> Installing common tools"
 install wget locales gnome-calculator xfce4-screenshooter git nitrogen
 
+echo "===> Installing libnss3-tool"
+install libnss3-tools
+
 echo "===> Installing nut.js dependencies"
 install build-essential libxtst-dev
 
