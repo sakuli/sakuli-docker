@@ -46,7 +46,8 @@ RUN $INST_SCRIPTS/setup.sh
 ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
 
 COPY ./src/common/wm/ $HOME/
-COPY ./src/common/config/ /etc/xdg/
+COPY ./src/common/config/openbox /etc/xdg/openbox
+COPY ./src/common/config/vnc $HOME/.vnc
 
 ### Copy env scripts for startup
 COPY ./src/common/env/ $STARTUPDIR/env
