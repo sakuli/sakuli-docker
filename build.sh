@@ -7,6 +7,7 @@ cp -rf ./license-validator/dist/index.js ./src/common/env/startup.js
 cp -rf ./license-validator/node_modules ./src/common/env/node_modules
 
 docker build \
+--no-cache \
 -t taconsol/sakuli:2.2.0 \
 -f Dockerfile.sakuli-ubuntu-openbox . \
 --build-arg=SAKULI_VERSION=2.2.0 \
