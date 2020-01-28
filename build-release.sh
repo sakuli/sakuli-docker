@@ -14,5 +14,5 @@ docker build \
 --build-arg=NPM_ACCESS_TOKEN=b7fc5d41-1dbe-49f6-ba30-d74682ee0b6a
 
 cd ./.test/
-sh test.sh
+sh test.sh 2.2.0
 cd -

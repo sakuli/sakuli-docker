@@ -2,4 +2,4 @@
 
 dgoss run \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
-    taconsol/sakuli:2.2.0
+    taconsol/sakuli:${1}
