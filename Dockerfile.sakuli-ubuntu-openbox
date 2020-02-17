@@ -62,7 +62,7 @@ COPY ./src/demo $HOME/demo_testcase
 COPY ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 
-USER 1000
+USER 1000:1000
 
 ### Install nvm
 ARG NODE_VERSION=lts/dubnium
