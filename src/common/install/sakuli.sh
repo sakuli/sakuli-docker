@@ -14,7 +14,7 @@ npm whoami
 echo "Installing Sakuli v$2"
 npm i -g @sakuli/cli@$2
 
-forwarders=("gearman" "checkmk" "icinga2")
+forwarders=("gearman" "checkmk" "icinga2" "prometheus")
 for fwd in "${forwarders[@]}"
 do
     echo "Installing Sakuli forwarder $fwd v$2"
