@@ -15,5 +15,5 @@ docker build \
 --build-arg=NODE_VERSION=lts/erbium
 
 cd ./.test/
-sh test.sh 2.2.0
+sh test.sh 2.3.0
 cd -
