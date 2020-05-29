@@ -24,7 +24,7 @@ jobs:
         curl -L https://github.com/aelsabbahy/goss/releases/latest/download/dgoss -o $HOME/dgoss
         chmod +rx $HOME/dgoss
     - name: Build and test image
-      run: ./build-latest.sh ${{ secrets.SAKULI_VERSION }} ${{ secrets.NPM_TOKEN }} ${{ secrets.NODE_VERSION }}
+      run: sh build-latest.sh ${{ secrets.SAKULI_VERSION }} ${{ secrets.NPM_TOKEN }} ${{ secrets.NODE_VERSION }}
       env:
         PATH: $PATH:$HOME
         SAKULI_LICENSE_KEY: ${{ secrets.SAKULI_LICENSE_KEY }}
