@@ -23,5 +23,6 @@ docker build \
 --build-arg=NODE_VERSION=${NODE_VERSION}
 
 cd ./.test/
-sh test.sh
+chmod u+x test.sh
+./test.sh
 cd -
