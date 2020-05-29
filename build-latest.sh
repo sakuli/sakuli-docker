@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
+
+set -ex
 
 SAKULI_VERSION=${1:-next}
 NPM_TOKEN=${2:-549ada59-bb56-4c22-ac54-1d3ec05d6a4d}
