@@ -14,11 +14,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2
     - name: Install goss and dgoss
-      run:
-        - curl -L https://github.com/aelsabbahy/goss/releases/latest/download/goss-linux-amd64 -o /usr/local/bin/goss
-        - chmod +rx /usr/local/bin/goss
-        - curl -L https://github.com/aelsabbahy/goss/releases/latest/download/dgoss -o /usr/local/bin/dgoss
-        - chmod +rx /usr/local/bin/dgoss
+      run: |
+        curl -L https://github.com/aelsabbahy/goss/releases/latest/download/goss-linux-amd64 -o /usr/local/bin/goss
+        chmod +rx /usr/local/bin/goss
+        curl -L https://github.com/aelsabbahy/goss/releases/latest/download/dgoss -o /usr/local/bin/dgoss
+        chmod +rx /usr/local/bin/dgoss
     - name: Build and test image
       run: ./build-latest.sh ${{ secrets.SAKULI_VERSION }} ${{ secrets.NPM_TOKEN }} ${{ secrets.NODE_VERSION }}
       env:
