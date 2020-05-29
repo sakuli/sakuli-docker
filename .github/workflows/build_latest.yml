@@ -17,7 +17,7 @@ jobs:
       run: |
         curl -L https://github.com/aelsabbahy/goss/releases/latest/download/goss-linux-amd64 -o $HOME/goss
         chmod +rx $HOME/goss
-        curl -L https://github.com/aelsabbahy/goss/releases/latest/download/dgoss -o $HOMR/dgoss
+        curl -L https://github.com/aelsabbahy/goss/releases/latest/download/dgoss -o $HOME/dgoss
         chmod +rx $HOME/dgoss
     - name: Build and test image
       run: ./build-latest.sh ${{ secrets.SAKULI_VERSION }} ${{ secrets.NPM_TOKEN }} ${{ secrets.NODE_VERSION }}
