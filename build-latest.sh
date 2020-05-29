@@ -8,9 +8,12 @@ echo "Sakuli version: $SAKULI_VERSION"
 echo "npm token: $NPM_TOKEN"
 echo "node version: $NODE_VERSION"
 
+echo "Running obfuscator"
 npm --prefix ./license-validator ci
+echo "Removing possible leftovers"
 rm -rf ./src/common/env
 mkdir -p ./src/common/env
+echo "Copy files"
 cp -rf ./license-validator/dist/index.js ./src/common/env/startup.js
 cp -rf ./license-validator/node_modules ./src/common/env/node_modules
 
