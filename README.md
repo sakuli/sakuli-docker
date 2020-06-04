@@ -41,6 +41,6 @@ on:
 ```
 
 - `push`: Whenever a changes are pushed to `develop` a new workflow run gets triggered
-- `repository_dispatch`: This event will be triggered from external sources, e.g. once our Travis build finished and published a new `@next` of Sakuli.
+- `repository_dispatch`: This event will be triggered from external sources, e.g. once our Travis build finished and published a new `@next` of Sakuli. This event will be triggered via webhook, as can be seen in the `trigger-image-build` stage of our Travis pipeline in [sakuli/sakuli](https://github.com/sakuli/sakuli).
 
 The workflow itself re-uses the `build-latest.sh` script, so the overall process to build the image does not differ from building it locally.
