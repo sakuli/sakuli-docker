@@ -1,19 +1,32 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
+set -ex
+
+SAKULI_VERSION=${1:-2.3.0}
+NPM_TOKEN=${2:-549ada59-bb56-4c22-ac54-1d3ec05d6a4d}
+NODE_VERSION=${3:-lts/erbium}
+
+echo "Sakuli version: $SAKULI_VERSION"
+echo "npm token: $NPM_TOKEN"
+echo "node version: $NODE_VERSION"
+
+echo "Running obfuscator"
 npm --prefix ./license-validator ci
+echo "Removing possible leftovers"
 rm -rf ./src/common/env
 mkdir -p ./src/common/env
+echo "Copy files"
 cp -rf ./license-validator/dist/index.js ./src/common/env/startup.js
 cp -rf ./license-validator/node_modules ./src/common/env/node_modules
 
 docker build \
 --no-cache \
--t taconsol/sakuli:2.3.0 \
+-t taconsol/sakuli:${SAKULI_VERSION} \
 -f Dockerfile.sakuli-ubuntu-openbox . \
---build-arg=SAKULI_VERSION=2.3.0 \
---build-arg=NPM_ACCESS_TOKEN=b7fc5d41-1dbe-49f6-ba30-d74682ee0b6a \
---build-arg=NODE_VERSION=lts/erbium
+--build-arg=SAKULI_VERSION=${SAKULI_VERSION} \
+--build-arg=NPM_ACCESS_TOKEN=${NPM_TOKEN} \
+--build-arg=NODE_VERSION=${NODE_VERSION}
 
 cd ./.test/
-sh test.sh 2.3.0
+sh test.sh ${SAKULI_VERSION}
 cd -
