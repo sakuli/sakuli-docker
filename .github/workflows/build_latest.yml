@@ -35,11 +35,11 @@ jobs:
       run: docker push taconsol/sakuli:latest
     - name: Trigger sakuli-docker-remote-win-connection
       run: >
-        curl -v -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+        curl -v -H "Authorization: token ${{ secrets.TRIGGER_TOKEN }}"
         --data '{"event_type": "build-latest"}'
         https://api.github.com/repos/sakuli/sakuli-docker-remote-win-connection/dispatches
     - name: Trigger sakuli-openshift-s2i
       run: >
-        curl -v -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+        curl -v -H "Authorization: token ${{ secrets.TRIGGER_TOKEN }}"
         --data '{"event_type": "build-latest"}'
         https://api.github.com/repos/sakuli/sakuli-openshift-s2i/dispatches
