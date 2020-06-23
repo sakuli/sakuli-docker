@@ -2,7 +2,7 @@ name: build-latest
 
 on:
   push:
-    branches: [develop]
+    branches: [develop, enhancement/**]
   repository_dispatch:
     types: [build-latest]
 
@@ -33,4 +33,19 @@ jobs:
       run: docker login -u ${{ secrets.DOCKER_USER }} -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Publish image
       run: docker push taconsol/sakuli:latest
-
+    - name: Trigger sakuli-docker-remote-win-connection
+      uses: wei/curl@v1.1.1
+      with:
+        args: >
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          --request POST
+          --data '{"event_type": "build-latest"}'
+          https://api.github.com/repos/sakuli/sakuli-docker-remote-win-connection/dispatches
+    - name: Trigger sakuli-openshift-s2i
+      uses: wei/curl@v1.1.1
+      with:
+        args: >
+          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          --request POST
+          --data '{"event_type": "build-latest"}'
+          https://api.github.com/repos/sakuli/sakuli-openshift-s2i/dispatches
