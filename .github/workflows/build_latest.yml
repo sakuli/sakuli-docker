@@ -37,15 +37,19 @@ jobs:
       uses: wei/curl@v1.1.1
       with:
         args: >
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          -H "Authorization: token $GITHUB_TOKEN"
           --request POST
           --data '{"event_type": "build-latest"}'
           https://api.github.com/repos/sakuli/sakuli-docker-remote-win-connection/dispatches
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     - name: Trigger sakuli-openshift-s2i
       uses: wei/curl@v1.1.1
       with:
         args: >
-          -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          -H "Authorization: token $GITHUB_TOKEN"
           --request POST
           --data '{"event_type": "build-latest"}'
           https://api.github.com/repos/sakuli/sakuli-openshift-s2i/dispatches
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
