@@ -24,7 +24,7 @@ jobs:
           curl -L https://github.com/aelsabbahy/goss/releases/latest/download/dgoss -o $HOME/dgoss
           chmod +rx $HOME/dgoss
       - name: Set SAKULI_VERSION to latest tag from sakuli/sakuli repository
-        - run: echo "::set-env name=SAKULI_VERSION::$(git ls-remote --tags git@github.com:sakuli/sakuli-docker.git | tail -1 | awk '{print $2}' | cut -d/ -f 3 | cut -c 2-6)"
+        run: echo "::set-env name=SAKULI_VERSION::$(git ls-remote --tags git@github.com:sakuli/sakuli-docker.git | tail -1 | awk '{print $2}' | cut -d/ -f 3 | cut -c 2-6)"
       - name: Build and test image
         run: |
           export PATH=$PATH:$HOME
