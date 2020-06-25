@@ -45,4 +45,3 @@ jobs:
         curl -H "Authorization: token ${{ secrets.TRIGGER_TOKEN }}"
         --data '{"event_type": "build-latest"}'
         https://api.github.com/repos/sakuli/sakuli-openshift-s2i/dispatches
-

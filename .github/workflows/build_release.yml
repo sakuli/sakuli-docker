@@ -2,7 +2,7 @@ name: build-latest
 
 on:
   push:
-    branches: [enhancement]
+    branches: [enhancement/**]
   repository_dispatch:
     types: [build-release]
 
