@@ -1,6 +1,8 @@
 name: build-latest
 
 on:
+  push:
+    branches: [enhancement]
   repository_dispatch:
     types: [build-release]
 
@@ -31,8 +33,8 @@ jobs:
           SAKULI_LICENSE_KEY: ${{ secrets.SAKULI_LICENSE_KEY }}
       - name: Login to Dockerhub
         run: docker login -u ${{ secrets.DOCKER_USER }} -p "${{ secrets.DOCKER_PASSWORD }}"
-      - name: Publish image
-        run: docker push taconsol/sakuli:${SAKULI_VERSION}
+#      - name: Publish image
+#        run: docker push taconsol/sakuli:${SAKULI_VERSION}
       - name: Trigger sakuli-docker-remote-win-connection
         run: >
           curl -H "Authorization: token ${{ secrets.TRIGGER_TOKEN }}"
