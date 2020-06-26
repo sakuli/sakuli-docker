@@ -105,11 +105,17 @@ if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
     tail -f $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
+# Link global node_modules into the actual test suite
+ln -s $(npm root -g | head -n 1) ${SAKULI_TEST_SUITE}/node_modules
+
 if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
     wait $PID_SUB
 else
     # unknown option ==> call command
     echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
     echo "Executing command: '$@'"
-    exec "$@"
+    $@
 fi
+
+# Remove the link to the actual test suite as it is most likely a mounted volume
+rm ${SAKULI_TEST_SUITE}/node_modules
