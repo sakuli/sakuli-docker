@@ -1,8 +1,8 @@
 name: build-release
 
 on:
-  repository_dispatch:
-    types: [build-release]
+  tags:
+    - v*.*.*
 
 jobs:
   build:
@@ -21,9 +21,8 @@ jobs:
         chmod +rx $HOME/goss
         curl -L https://github.com/aelsabbahy/goss/releases/latest/download/dgoss -o $HOME/dgoss
         chmod +rx $HOME/dgoss
-    - name: Set SAKULI_VERSION to latest tag from sakuli/sakuli repository
-      run: |
-        echo "::set-env name=SAKULI_VERSION::$(node -pe 'JSON.parse(process.argv[1])[0].name' "$(curl -s https://api.github.com/repos/sakuli/sakuli/tags)" | cut -c 2-6)"
+    - name: Set SAKULI_VERSION according to pushed tag
+      run: echo "::set-env name=SAKULI_VERSION::${GITHUB_REF#refs/*/v}
     - name: Build and test image
       run: |
         export PATH=$PATH:$HOME
