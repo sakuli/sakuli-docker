@@ -34,13 +34,3 @@ jobs:
       run: docker login -u ${{ secrets.DOCKER_USER }} -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Publish image
       run: docker push taconsol/sakuli:${SAKULI_VERSION}
-    - name: Trigger sakuli-docker-remote-win-connection
-      run: >
-        curl -H "Authorization: token ${{ secrets.TRIGGER_TOKEN }}"
-        --data '{"event_type": "build-release"}'
-        https://api.github.com/repos/sakuli/sakuli-docker-remote-win-connection/dispatches
-    - name: Trigger sakuli-openshift-s2i
-      run: >
-        curl -H "Authorization: token ${{ secrets.TRIGGER_TOKEN }}"
-        --data '{"event_type": "build-release"}'
-        https://api.github.com/repos/sakuli/sakuli-openshift-s2i/dispatches
