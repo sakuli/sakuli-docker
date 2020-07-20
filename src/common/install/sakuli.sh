@@ -14,6 +14,12 @@ npm whoami
 echo "Installing Sakuli v$2"
 npm i -g -E @sakuli/cli@$2
 
+echo "Installing Sakuli legacy v$2"
+npm i -g -E @sakuli/legacy@$2
+
+echo "Installing Sakuli legacy-types v$2"
+npm i -g -E @sakuli/legacy-types@$2
+
 forwarders=("gearman" "checkmk" "icinga2" "prometheus")
 for fwd in "${forwarders[@]}"
 do
@@ -21,10 +27,8 @@ do
     npm i -g -E @sakuli/forwarder-$fwd@$2
 done
 
-echo "Installing Typescript"
-npm i -g -E typescript@3.9.5
-echo "Installing sakuli legacy types"
-npm i -g -E @sakuli/legacy-types@$2
+echo "Installing TypeScript v3.8.3"
+npm i -g -E typescript@3.8.3
 
 echo "Configuring .npmrc"
 echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > $HOME/.npmrc
