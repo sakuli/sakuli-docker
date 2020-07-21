@@ -106,7 +106,9 @@ if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
 fi
 
 # Link global node_modules into the actual test suite
-ln -s $(npm root -g | head -n 1) ${SAKULI_TEST_SUITE}/node_modules
+if [ "${SAKULI_TEST_SUITE}" ]; then
+  ln -s $(npm root -g | head -n 1) ${SAKULI_TEST_SUITE}/node_modules
+fi
 
 if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
     wait $PID_SUB
@@ -118,4 +120,6 @@ else
 fi
 
 # Remove the link to the actual test suite as it is most likely a mounted volume
-rm ${SAKULI_TEST_SUITE}/node_modules
+if [ -d ${SAKULI_TEST_SUITE}/node_modules ]; then
+  rm ${SAKULI_TEST_SUITE}/node_modules
+fi
