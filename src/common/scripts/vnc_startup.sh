@@ -107,6 +107,9 @@ fi
 
 # Link global node_modules into the actual test suite
 if [ "${SAKULI_TEST_SUITE}" ]; then
+  if [ -d ${SAKULI_TEST_SUITE}/node_modules ]; then
+    mv ${SAKULI_TEST_SUITE}/node_modules ${SAKULI_TEST_SUITE}/node_modules_bak
+  fi
   ln -s $(npm root -g | head -n 1) ${SAKULI_TEST_SUITE}/node_modules
 fi
 
@@ -121,5 +124,9 @@ fi
 
 # Remove the link to the actual test suite as it is most likely a mounted volume
 if [ -d ${SAKULI_TEST_SUITE}/node_modules ]; then
-  rm ${SAKULI_TEST_SUITE}/node_modules
+  rm -r ${SAKULI_TEST_SUITE}/node_modules
+fi
+
+if [ -d ${SAKULI_TEST_SUITE}/node_modules_bak ]; then
+    mv ${SAKULI_TEST_SUITE}/node_modules_bak ${SAKULI_TEST_SUITE}/node_modules
 fi
