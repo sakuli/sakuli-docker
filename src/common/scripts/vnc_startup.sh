@@ -113,6 +113,8 @@ if [ "${SAKULI_TEST_SUITE}" ]; then
   ln -s $(npm root -g | head -n 1) ${SAKULI_TEST_SUITE}/node_modules
 fi
 
+set +e
+
 if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
     wait $PID_SUB
 else
@@ -130,3 +132,5 @@ fi
 if [ -d ${SAKULI_TEST_SUITE}/node_modules_bak ]; then
     mv ${SAKULI_TEST_SUITE}/node_modules_bak ${SAKULI_TEST_SUITE}/node_modules
 fi
+
+set -e
