@@ -34,8 +34,12 @@ ENV HOME=/headless \
     VNC_PW=vncpassword \
     VNC_VIEW_ONLY=false \
     NPM_TOKEN=REPLACE_WITH_YOUR_NPM_TOKEN \
-    IMG=taconsol/sakuli
+    IMG=taconsol/sakuli \
+    EXECUTION_DIR=/testsuite_execution
 WORKDIR $HOME
+
+### Create EXECUTION_DIR and set permissions correctly
+RUN mkdir ${EXECUTION_DIR} && chmod 777 ${EXECUTION_DIR}
 
 ### Copy all install scripts for further steps
 COPY ./src/common/install/ $INST_SCRIPTS/

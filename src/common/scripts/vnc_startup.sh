@@ -107,11 +107,12 @@ fi
 
 # Link global node_modules into the actual test suite
 if [ "${SAKULI_TEST_SUITE}" ]; then
-  if [ -d ${SAKULI_TEST_SUITE}/node_modules ]; then
-    mv ${SAKULI_TEST_SUITE}/node_modules ${SAKULI_TEST_SUITE}/node_modules_bak
-  fi
-  ln -s $(npm root -g | head -n 1) ${SAKULI_TEST_SUITE}/node_modules
+  rsync -avqO ${SAKULI_TEST_SUITE}/* ${EXECUTION_DIR} --exclude node_modules
+else
+  # Ensure nothing breaks if user mounts into ${HOME}/demo_testcase for any reason
+  rsync -avqO ${HOME}/demo_testcase/* ${EXECUTION_DIR} --exclude node_modules
 fi
+ln -s $(npm root -g | head -n 1) ${EXECUTION_DIR}/node_modules
 
 set +e
 
@@ -124,13 +125,7 @@ else
     $@
 fi
 
-# Remove the link to the actual test suite as it is most likely a mounted volume
-if [ -d ${SAKULI_TEST_SUITE}/node_modules ]; then
-  rm -r ${SAKULI_TEST_SUITE}/node_modules
-fi
+# TODO: Distribute logs back to volume, if possible
 
-if [ -d ${SAKULI_TEST_SUITE}/node_modules_bak ]; then
-    mv ${SAKULI_TEST_SUITE}/node_modules_bak ${SAKULI_TEST_SUITE}/node_modules
-fi
 
 set -e

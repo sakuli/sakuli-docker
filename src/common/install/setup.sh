@@ -13,7 +13,7 @@ function install {
 apt-get update -y
 apt-get upgrade -y
 echo "===> Installing common tools"
-install wget locales gnome-calculator xfce4-screenshooter git nitrogen
+install wget locales gnome-calculator xfce4-screenshooter git nitrogen rsync
 
 echo "===> Installing libnss3-tool"
 install libnss3-tools
