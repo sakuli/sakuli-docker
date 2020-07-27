@@ -6,7 +6,7 @@ main() {
 }
 
 clone_repository() {
-    $STARTUPDIR/clone_repo.sh
+    $STARTUPDIR/clone_git_repo.sh
 }
 
 if [ $# -gt 0 ]; then
