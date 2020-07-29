@@ -107,10 +107,10 @@ fi
 
 # Link global node_modules into the actual test suite
 if [ "${SAKULI_TEST_SUITE}" ]; then
-  rsync -avqO ${SAKULI_TEST_SUITE}/* ${EXECUTION_DIR} --exclude node_modules
+  rsync -aqO ${SAKULI_TEST_SUITE}/* ${EXECUTION_DIR} --exclude node_modules
 else
   # Ensure nothing breaks if user mounts into ${HOME}/demo_testcase for any reason
-  rsync -avqO ${HOME}/demo_testcase/* ${EXECUTION_DIR} --exclude node_modules
+  rsync -aqO ${HOME}/demo_testcase/* ${EXECUTION_DIR} --exclude node_modules
 fi
 ln -s $(npm root -g | head -n 1) ${EXECUTION_DIR}/node_modules
 
@@ -125,7 +125,6 @@ else
     $@
 fi
 
-# TODO: Distribute logs back to volume, if possible
-
+rsync -aqO ${EXECUTION_DIR}/* ${SAKULI_TEST_SUITE} --exclude node_modules 2>/dev/null || echo -e "Could not restore logs and screenshots due to insufficient permissions."
 
 set -e
