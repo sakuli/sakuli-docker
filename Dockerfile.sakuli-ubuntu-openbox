@@ -35,11 +35,11 @@ ENV HOME=/headless \
     VNC_VIEW_ONLY=false \
     NPM_TOKEN=REPLACE_WITH_YOUR_NPM_TOKEN \
     IMG=taconsol/sakuli \
-    EXECUTION_DIR=/testsuite_execution
+    SAKULI_EXECUTION_DIR=/testsuite_execution
 WORKDIR $HOME
 
-### Create EXECUTION_DIR and set permissions correctly
-RUN mkdir ${EXECUTION_DIR} && chmod 777 ${EXECUTION_DIR}
+### Create SAKULI_EXECUTION_DIR and set permissions correctly
+RUN mkdir ${SAKULI_EXECUTION_DIR} && chmod 777 ${SAKULI_EXECUTION_DIR}
 
 ### Copy all install scripts for further steps
 COPY ./src/common/install/ $INST_SCRIPTS/

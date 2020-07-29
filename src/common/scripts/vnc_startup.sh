@@ -107,12 +107,12 @@ fi
 
 # Link global node_modules into the actual test suite
 if [ "${SAKULI_TEST_SUITE}" ]; then
-  rsync -aqO ${SAKULI_TEST_SUITE}/* ${EXECUTION_DIR} --exclude node_modules
+  rsync -aqO ${SAKULI_TEST_SUITE}/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
 else
   # Ensure nothing breaks if user mounts into ${HOME}/demo_testcase for any reason
-  rsync -aqO ${HOME}/demo_testcase/* ${EXECUTION_DIR} --exclude node_modules
+  rsync -aqO ${HOME}/demo_testcase/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
 fi
-ln -s $(npm root -g | head -n 1) ${EXECUTION_DIR}/node_modules
+ln -s $(npm root -g | head -n 1) ${SAKULI_EXECUTION_DIR}/node_modules
 
 set +e
 
@@ -125,6 +125,6 @@ else
     $@
 fi
 
-rsync -aqO ${EXECUTION_DIR}/* ${SAKULI_TEST_SUITE} --exclude node_modules 2>/dev/null || echo -e "Could not restore logs and screenshots due to insufficient permissions."
+rsync -aqO ${SAKULI_EXECUTION_DIR}/* ${SAKULI_TEST_SUITE} --exclude node_modules 2>/dev/null || echo -e "ERROR: Could not restore logs and screenshots due to insufficient permissions."
 
 set -e
