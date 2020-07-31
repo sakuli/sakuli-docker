@@ -4,26 +4,32 @@
 ARG BASE_IMAGE_VERSION=18.04
 FROM ubuntu:$BASE_IMAGE_VERSION
 
-LABEL maintainer="simon.hofmann@consol.de"
+ARG NODE_VERSION
+ARG SAKULI_VERSION
+ARG NPM_ACCESS_TOKEN
+ARG BUILD_DATE
 
-ENV REFRESHED_AT 2020-03-18
+# Ensure mandatory args are set
+RUN test -n "${NODE_VERSION}" && \
+    test -n "${SAKULI_VERSION}" && \
+    test -n "${NPM_ACCESS_TOKEN}" && \
+    test -n "${BUILD_DATE}"
 
-LABEL io.k8s.description="Sakuli Test Container with OpenBox window manager" \
+LABEL maintainer="simon.hofmann@consol.de" \
+    io.k8s.description="Sakuli Test Container with OpenBox window manager" \
     io.k8s.display-name="Sakuli Test Container based on Ubuntu" \
     io.openshift.expose-services="6901:http,5901:xvnc" \
     io.openshift.tags="vnc, ubuntu, openbox" \
     io.openshift.non-scalable=true
 
-## Connection ports for controlling the UI:
-# VNC port:5901
-# noVNC webport, connect via http://IP:6901/?password=vncpassword
-ENV DISPLAY=:1 \
+ENV REFRESHED_AT=${BUILD_DATE} \
+    LANG='en_US.UTF-8' \
+    LANGUAGE='en_US:en' \
+    LC_ALL='en_US.UTF-8' \
+    DISPLAY=:1 \
     VNC_PORT=5901 \
-    NO_VNC_PORT=6901
-EXPOSE $VNC_PORT $NO_VNC_PORT
-
-### Envrionment config
-ENV HOME=/headless \
+    NO_VNC_PORT=6901 \
+    HOME=/headless \
     TERM=xterm \
     STARTUPDIR=/dockerstartup \
     INST_SCRIPTS=/headless/install \
@@ -36,6 +42,9 @@ ENV HOME=/headless \
     NPM_TOKEN=REPLACE_WITH_YOUR_NPM_TOKEN \
     IMG=taconsol/sakuli \
     SAKULI_EXECUTION_DIR=/testsuite_execution
+
+EXPOSE $VNC_PORT $NO_VNC_PORT
+
 WORKDIR $HOME
 
 ### Create SAKULI_EXECUTION_DIR and set permissions correctly
@@ -45,8 +54,46 @@ RUN mkdir ${SAKULI_EXECUTION_DIR} && chmod 777 ${SAKULI_EXECUTION_DIR}
 COPY ./src/common/install/ $INST_SCRIPTS/
 RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
 
-RUN $INST_SCRIPTS/setup.sh
-ENV LANG='en_US.UTF-8' LANGUAGE='en_US:en' LC_ALL='en_US.UTF-8'
+### Install required packages and add configuration
+RUN apt-get update && \
+    apt-get install -y \
+                    wget \
+                    locales \
+                    gnome-calculator \
+                    xfce4-screenshooter \
+                    git \
+                    nitrogen \
+                    rsync \
+                    libnss3-tools \
+                    build-essential \
+                    libxtst-dev \
+                    net-tools \
+                    python-numpy \
+                    chromium-browser \
+                    chromium-chromedriver \
+                    chromium-browser-l10n \
+                    chromium-codecs-ffmpeg \
+                    firefox \
+                    firefox-geckodriver \
+                    openbox \
+                    obconf \
+                    obmenu \
+                    xterm \
+                    x11-xkb-utils \
+                    libnss-wrapper \
+                    gettext && \
+    apt-get clean -y && \
+    apt-get autoremove -y && \
+    rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
+    locale-gen en_US.UTF-8 && \
+    wget -qO- https://dl.bintray.com/tigervnc/stable/tigervnc-1.9.0.x86_64.tar.gz | tar xz --strip 1 --no-same-owner --no-same-permissions -C / && \
+    mkdir -p $NO_VNC_HOME/utils/websockify && \
+    wget -qO- https://github.com/novnc/noVNC/archive/v1.0.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME && \
+    wget -qO- https://github.com/novnc/websockify/archive/v0.6.1.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
+    chmod +x -v $NO_VNC_HOME/utils/*.sh && \
+    ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html && \
+    ln -s /usr/bin/chromium-browser /usr/bin/google-chrome && \
+    echo "CHROMIUM_FLAGS='--no-sandbox --user-data-dir'" > $HOME/.chromium-browser.init
 
 COPY ./src/common/wm/ $HOME/
 COPY ./src/common/config/openbox /etc/xdg/openbox
@@ -68,13 +115,9 @@ RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
 USER 1000:1000
 
 ### Install nvm
-ARG NODE_VERSION=lts/dubnium
 RUN $INST_SCRIPTS/nvm.sh $NODE_VERSION
 
 ### Install Sakuli
-ARG NODE_VERSION=lts/dubnium
-ARG SAKULI_VERSION=2.2.0
-ARG NPM_ACCESS_TOKEN
 RUN $INST_SCRIPTS/sakuli.sh $NODE_VERSION $SAKULI_VERSION $NPM_ACCESS_TOKEN
 
 RUN $INST_SCRIPTS/startup.sh
