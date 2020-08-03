@@ -99,10 +99,14 @@ echo -e "\nVNCSERVER started on DISPLAY= $DISPLAY \n\t=> connect via VNC viewer 
 echo -e "\nnoVNC HTML client started:\n\t=> connect via http://$VNC_IP:$NO_VNC_PORT/?password=...\n"
 
 
-if [[ $DEBUG == true ]] || [[ $1 =~ -t|--tail-log ]]; then
+if [[ $DEBUG == true ]]; then
     echo -e "\n------------------ $HOME/.vnc/*$DISPLAY.log ------------------"
     # if option `-t` or `--tail-log` block the execution and tail the VNC log
-    tail -f $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
+    TAIL_PARAMETERS=""
+    if [[ $1 =~ -t|--tail-log ]]; then
+      TAIL_PARAMETERS="-f"
+    fi
+    tail ${TAIL_PARAMETERS} $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
 ## Preparing execution environment
@@ -139,6 +143,7 @@ fi
 [[ $DEBUG == true ]] && echo "Restoring testsuite to ${SAKULI_TEST_SUITE}."
 RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/* ${SAKULI_TEST_SUITE} --exclude node_modules"
 if [[ $DEBUG == true ]]; then
+    echo "${RESTORE_COMMAND}"
     ${RESTORE_COMMAND}
 else
     ${RESTORE_COMMAND} 2>/dev/null
