@@ -13,14 +13,11 @@ if [ $# -gt 0 ]; then
 	# pass all parameters
 	main "$@"
 else
-	# no parameters
-	# - run the suite defined by $SAKULI_TEST_SUITE, if set
-	# or
-	# - run the example case (fallback)
-	if [[ ! -z "$GIT_URL" ]]; then
+  if [[ ! -z "$GIT_URL" ]]; then
 	    clone_repository
 	fi
-	pushd ${SAKULI_TEST_SUITE:-$HOME/demo_testcase}
+	# no parameters: Run test project placed in ${SAKULI_EXECUTION_DIR}
+  pushd ${SAKULI_EXECUTION_DIR}
 	main npm test
 	popd
 fi
