@@ -20,12 +20,14 @@ cp -rf ./license-validator/dist/index.js ./src/common/env/startup.js
 cp -rf ./license-validator/node_modules ./src/common/env/node_modules
 
 docker build \
+--pull \
 --no-cache \
 -t taconsol/sakuli:${SAKULI_VERSION} \
 -f Dockerfile.sakuli-ubuntu-openbox . \
 --build-arg=SAKULI_VERSION=${SAKULI_VERSION} \
 --build-arg=NPM_ACCESS_TOKEN=${NPM_TOKEN} \
---build-arg=NODE_VERSION=${NODE_VERSION}
+--build-arg=NODE_VERSION=${NODE_VERSION} \
+--build-arg=BUILD_DATE=$(date +"%F")
 
 cd ./.test/
 sh test.sh ${SAKULI_VERSION}
