@@ -130,8 +130,9 @@ else
   rsync ${RSYNC_OPTIONS} ${HOME}/demo_testcase/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
 fi
 # Link global node_modules into ${SAKULI_EXECUTION_DIR}
-[[ $DEBUG == true ]] && echo "Linking global node_modules to execution environment."
-ln -s $(npm root -g | head -n 1) ${SAKULI_EXECUTION_DIR}/node_modules
+GLOBAL_NODE_MODULES_PATH=$(npm root -g | head -n 1)
+[[ $DEBUG == true ]] && echo "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to execution environment."
+ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/node_modules
 
 set +e
 
