@@ -109,6 +109,11 @@ if [[ $DEBUG == true ]]; then
     tail ${TAIL_PARAMETERS} $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
+if [[ -n "$GIT_URL" ]]; then
+    echo -e "\n\n------------------ CLONE GIT REPOSITORY ---------------------------"
+    git clone $GIT_URL /headless/git-repository
+fi
+
 ## Preparing execution environment
 RSYNC_OPTIONS="-aO"
 if [[ $DEBUG == true ]]; then
