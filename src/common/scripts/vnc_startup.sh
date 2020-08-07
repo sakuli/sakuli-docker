@@ -109,11 +109,6 @@ if [[ $DEBUG == true ]]; then
     tail ${TAIL_PARAMETERS} $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
-if [[ -n "$GIT_URL" ]]; then
-    echo -e "\n\n------------------ CLONE GIT REPOSITORY ---------------------------"
-    git clone $GIT_URL /headless/git-repository
-fi
-
 ## Preparing execution environment
 RSYNC_OPTIONS="-aO"
 if [[ $DEBUG == true ]]; then
@@ -125,6 +120,11 @@ fi
 [[ $DEBUG == true ]] && echo "Syncing test suite to execution environment."
 if [ "${SAKULI_TEST_SUITE}" ]; then
   rsync ${RSYNC_OPTIONS} ${SAKULI_TEST_SUITE}/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
+elif [ "${GIT_URL}" ]; then
+  echo "------------------ Cloning git repository ------------------"
+  GIT_REPOSITORY_DIR=/headless/git-repository
+  git clone $GIT_URL $GIT_REPOSITORY_DIR
+  rsync ${RSYNC_OPTIONS} ${GIT_REPOSITORY_DIR}/${GIT_CONTEXT_DIR}/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
 else
   # Ensure nothing breaks if user mounts into ${HOME}/demo_testcase for any reason
   rsync ${RSYNC_OPTIONS} ${HOME}/demo_testcase/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
