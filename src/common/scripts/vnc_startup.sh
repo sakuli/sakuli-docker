@@ -146,14 +146,16 @@ else
 fi
 
 ## Restore logs and screenshots into the actual mounted volume, if possible
-[[ $DEBUG == true ]] && echo "Restoring testsuite to ${SAKULI_TEST_SUITE}."
-RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/* ${SAKULI_TEST_SUITE} --exclude node_modules"
-if [[ $DEBUG == true ]]; then
-    echo "${RESTORE_COMMAND}"
-    ${RESTORE_COMMAND}
-else
-    ${RESTORE_COMMAND} 2>/dev/null
+if [ -z "$GIT_URL" ]; then
+  [[ $DEBUG == true ]] && echo "Restoring testsuite to ${SAKULI_TEST_SUITE}."
+  RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/* ${SAKULI_TEST_SUITE} --exclude node_modules"
+  if [[ $DEBUG == true ]]; then
+      echo "${RESTORE_COMMAND}"
+      ${RESTORE_COMMAND}
+  else
+      ${RESTORE_COMMAND} 2>/dev/null
+  fi
+  [ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots due to insufficient permissions."
 fi
-[ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots due to insufficient permissions."
 
 set -e
