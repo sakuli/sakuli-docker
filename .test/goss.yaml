@@ -50,6 +50,8 @@ package:
     installed: true
   libnss3-tools:
     installed: true
+  git:
+    installed: true
 port:
   tcp:5901:
     listening: true

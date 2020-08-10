@@ -120,6 +120,11 @@ fi
 [[ $DEBUG == true ]] && echo "Syncing test suite to execution environment."
 if [ "${SAKULI_TEST_SUITE}" ]; then
   rsync ${RSYNC_OPTIONS} ${SAKULI_TEST_SUITE}/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
+elif [ "${GIT_URL}" ]; then
+  echo "------------------ Cloning git repository ------------------"
+  GIT_REPOSITORY_DIR=/headless/git-repository
+  git clone $GIT_URL $GIT_REPOSITORY_DIR
+  rsync ${RSYNC_OPTIONS} ${GIT_REPOSITORY_DIR}/${GIT_CONTEXT_DIR}/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
 else
   # Ensure nothing breaks if user mounts into ${HOME}/demo_testcase for any reason
   rsync ${RSYNC_OPTIONS} ${HOME}/demo_testcase/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
@@ -141,14 +146,16 @@ else
 fi
 
 ## Restore logs and screenshots into the actual mounted volume, if possible
-[[ $DEBUG == true ]] && echo "Restoring testsuite to ${SAKULI_TEST_SUITE}."
-RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/* ${SAKULI_TEST_SUITE} --exclude node_modules"
-if [[ $DEBUG == true ]]; then
-    echo "${RESTORE_COMMAND}"
-    ${RESTORE_COMMAND}
-else
-    ${RESTORE_COMMAND} 2>/dev/null
+if [ -z "$GIT_URL" ]; then
+  [[ $DEBUG == true ]] && echo "Restoring testsuite to ${SAKULI_TEST_SUITE}."
+  RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/* ${SAKULI_TEST_SUITE} --exclude node_modules"
+  if [[ $DEBUG == true ]]; then
+      echo "${RESTORE_COMMAND}"
+      ${RESTORE_COMMAND}
+  else
+      ${RESTORE_COMMAND} 2>/dev/null
+  fi
+  [ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots due to insufficient permissions."
 fi
-[ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots due to insufficient permissions."
 
 set -e
