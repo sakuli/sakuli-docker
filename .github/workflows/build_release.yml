@@ -23,7 +23,7 @@ jobs:
         curl -L https://github.com/aelsabbahy/goss/releases/latest/download/dgoss -o $HOME/dgoss
         chmod +rx $HOME/dgoss
     - name: Set SAKULI_VERSION according to pushed tag
-      run: echo "::set-env name=SAKULI_VERSION::${GITHUB_REF#refs/*/v}
+      run: echo "::set-env name=SAKULI_VERSION::${GITHUB_REF#refs/*/v}"
     - name: Build and test image
       run: |
         export PATH=$PATH:$HOME
