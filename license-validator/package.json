@@ -1,6 +1,6 @@
 {
   "name": "license-validator",
-  "version": "2.3.0",
+  "version": "2.4.0",
   "description": "",
   "main": "./dist/index.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@sakuli/plugin-validator": "2.3.0",
+    "@sakuli/plugin-validator": "2.4.0",
     "chalk": "^2.4.2",
     "cpx": "^1.5.0"
   },
