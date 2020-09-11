@@ -126,8 +126,8 @@ elif [ "${GIT_URL}" ]; then
   git clone $GIT_URL $GIT_REPOSITORY_DIR
   rsync ${RSYNC_OPTIONS} ${GIT_REPOSITORY_DIR}/${GIT_CONTEXT_DIR}/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
 else
-  # Ensure nothing breaks if user mounts into ${HOME}/demo_testcase for any reason
-  rsync ${RSYNC_OPTIONS} ${HOME}/demo_testcase/* ${SAKULI_EXECUTION_DIR} --exclude node_modules
+  echo "ERROR: SAKULI_TEST_SUITE not set."
+  exit 1
 fi
 # Link global node_modules into ${SAKULI_EXECUTION_DIR}
 GLOBAL_NODE_MODULES_PATH=$(npm root -g | head -n 1)
