@@ -1,0 +1,17 @@
+{
+  "name": "e2e-broken",
+  "version": "2.3.0",
+  "description": "A broken e2e test suite :-/",
+  "private": true,
+  "contributors": [
+    "Tim Keiner <tim.keiner@consol.de>",
+    "Simon Hofmann <simon.hofmann@consol.de>",
+    "Sven Hettwer <sven.hettwer@consol.de>",
+    "Cliff Le Van <cliff.le.van@consol.de>"
+  ],
+  "homepage": "https://github.com/sakuli/sakuli#readme",
+  "scripts": {
+    "test": "sakuli run .",
+    "test:debug": "node --inspect node_modules/@sakuli/cli/dist/index run ."
+  }
+}

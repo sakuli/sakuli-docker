@@ -6,6 +6,7 @@ dgoss run \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     taconsol/sakuli:${1:-latest}
 
+# standard use case
 docker run \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
@@ -14,6 +15,7 @@ docker run \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
 
+# use case with altered user and group
 docker run \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
@@ -23,6 +25,7 @@ docker run \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
 
+# git clone use case
 docker run \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
@@ -30,3 +33,15 @@ docker run \
     -e GIT_CONTEXT_DIR=packages/e2e/e2e-suite \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
+
+# ensure exit code on error
+set +e
+docker run \
+    --rm \
+    -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
+    -e SAKULI_TEST_SUITE=/testsuite/e2e-broken \
+    -v $(pwd)/e2e:/testsuite \
+    --shm-size=2G \
+    taconsol/sakuli:${1:-latest}
+[[ "$?" == "0" ]] && echo "Expected error code != 0" && exit 1
+set -e
