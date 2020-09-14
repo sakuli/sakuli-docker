@@ -45,3 +45,11 @@ docker run \
     taconsol/sakuli:${1:-latest}
 [[ "$?" == "0" ]] && echo "Expected error code != 0" && exit 1
 set -e
+
+# start another command than sakuli
+docker run \
+    --rm \
+    -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
+    --shm-size=2G \
+    taconsol/sakuli:${1:-latest} \
+    "echo success!"

@@ -25,9 +25,6 @@ elif [ "${GIT_URL}" ]; then
   git clone $GIT_URL $GIT_REPOSITORY_DIR
   rsync ${RSYNC_OPTIONS} ${GIT_REPOSITORY_DIR}/${GIT_CONTEXT_DIR}/../* ${SAKULI_EXECUTION_DIR} --exclude node_modules
   SAKULI_SUITE_NAME=$(getTestSuiteName ${GIT_CONTEXT_DIR})
-else
-  echo "ERROR: SAKULI_TEST_SUITE not set."
-  exit 1
 fi
 
 # Link global node_modules into ${SAKULI_EXECUTION_DIR}
