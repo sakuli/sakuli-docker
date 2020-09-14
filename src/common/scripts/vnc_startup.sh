@@ -136,6 +136,7 @@ ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/node_modules
 
 set +e
 
+SAKULI_RETURN_CODE=1
 if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
     wait $PID_SUB
 else
@@ -143,6 +144,7 @@ else
     echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
     echo "Executing command: '$@'"
     $@
+    SAKULI_RETURN_CODE=$?
 fi
 
 ## Restore logs and screenshots into the actual mounted volume, if possible
@@ -158,4 +160,4 @@ if [ -z "$GIT_URL" ]; then
   [ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots due to insufficient permissions."
 fi
 
-set -e
+exit ${SAKULI_RETURN_CODE}
