@@ -14,8 +14,6 @@ docker run \
     -v $(pwd)/e2e:/testsuite \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
-grep "Finished Testcase Fry a typed egg with state Ok" $(pwd)/e2e/e2e-suite/_logs/sakuli.log
-grep "Finished Testcase Fry an egg with state Ok" $(pwd)/e2e/e2e-suite/_logs/sakuli.log
 
 # use case with altered user and group
 docker run \
