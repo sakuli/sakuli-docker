@@ -64,4 +64,11 @@ if [ -z "$GIT_URL" ]; then
   [ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots due to insufficient permissions."
 fi
 
+# unlink global node_modules in ${SAKULI_EXECUTION_DIR}
+GLOBAL_NODE_MODULES_PATH=$(npm root -g | head -n 1)
+[[ $DEBUG == true ]] && echo "Unlink global node_modules from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
+unlink ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
+[[ $DEBUG == true ]] && echo "Unlink global node_modules from ${SAKULI_EXECUTION_DIR}."
+unlink ${SAKULI_EXECUTION_DIR}/node_modules
+
 exit ${SAKULI_RETURN_CODE}
