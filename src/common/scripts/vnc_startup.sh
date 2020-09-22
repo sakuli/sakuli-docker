@@ -2,45 +2,10 @@
 ### every exit != 0 fails the script
 set -e
 
-## print out help
-help (){
-echo "
-USAGE:
-docker run -it -p 6901:6901 -p 5901:5901 consol/<image>:<tag> <option>
-
-IMAGES:
-taconsol/sakuli
-
-OPTIONS:
--w, --wait      (default) keeps the UI and the vncserver up until SIGINT or SIGTERM will received
--s, --skip      skip the vnc startup and just execute the assigned command.
-                example: docker run taconsol/sakuli --skip bash
--d, --debug     enables more detailed startup output
-                e.g. 'docker run taconsol/sakuli --debug bash'
--h, --help      print out this help
-"
-}
-if [[ $1 =~ -h|--help ]]; then
-    help
-    exit 0
-fi
-
 # should also source $STARTUPDIR/generate_container_user
 source $HOME/.bashrc
 
 node $STARTUPDIR/env/startup.js
-
-# add `--skip` to startup args, to skip the VNC startup procedure
-if [[ $1 =~ -s|--skip ]]; then
-    echo -e "\n\n------------------ SKIP VNC STARTUP -----------------"
-    echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
-    echo "Executing command: '${@:2}'"
-    exec "${@:2}"
-fi
-if [[ $1 =~ -d|--debug ]]; then
-    echo -e "\n\n------------------ DEBUG VNC STARTUP -----------------"
-    export DEBUG=true
-fi
 
 ## correct forwarding of shutdown signal
 cleanup () {
@@ -79,7 +44,6 @@ chmod 600 $PASSWD_PATH
 echo -e "\n------------------ start noVNC  ----------------------------"
 if [[ $DEBUG == true ]]; then echo "$NO_VNC_HOME/utils/launch.sh --vnc localhost:$VNC_PORT --listen $NO_VNC_PORT"; fi
 $NO_VNC_HOME/utils/launch.sh --vnc localhost:$VNC_PORT --listen $NO_VNC_PORT &> $STARTUPDIR/no_vnc_startup.log &
-PID_SUB=$!
 
 echo -e "\n------------------ start VNC server ------------------------"
 echo "remove old vnc locks to be a reattachable container"

@@ -38,21 +38,17 @@ ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/node_modules
 set +e
 
 SAKULI_RETURN_CODE=1
-if [ -z "$1" ] || [[ $1 =~ -w|--wait ]]; then
-    wait $PID_SUB
+if [ -f "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/package.json" ]; then
+  pushd ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}
 else
-    if [ -f "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/package.json" ]; then
-      pushd ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}
-    else
-      pushd ${SAKULI_EXECUTION_DIR}
-    fi
-    # unknown option ==> call command
-    echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
-    echo "Executing command: '$@'"
-    $@
-    SAKULI_RETURN_CODE=$?
-    popd
+  pushd ${SAKULI_EXECUTION_DIR}
 fi
+# unknown option ==> call command
+echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
+echo "Executing command: '$@'"
+$@
+SAKULI_RETURN_CODE=$?
+popd
 
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
