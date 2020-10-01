@@ -71,3 +71,10 @@ http:
     no-follow-redirects: false
     timeout: 5000
     body: []
+
+command:
+  check-log-mode:
+    exit-status: 0
+    exec: "echo ${LOG_MODE}"
+    stdout:
+      - "/^ci$/"
