@@ -41,7 +41,8 @@ ENV REFRESHED_AT=${BUILD_DATE} \
     VNC_VIEW_ONLY=false \
     NPM_TOKEN=REPLACE_WITH_YOUR_NPM_TOKEN \
     IMG=taconsol/sakuli \
-    SAKULI_EXECUTION_DIR=/testsuite_execution
+    SAKULI_EXECUTION_DIR=/testsuite_execution \
+    LOG_MODE=ci
 
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
