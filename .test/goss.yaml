@@ -52,6 +52,14 @@ package:
     installed: true
   git:
     installed: true
+  curl:
+    installed: true
+  iputils-ping:
+    installed: true
+  iputils-tracepath:
+    installed: true
+  dnsutils:
+    installed: true
 port:
   tcp:5901:
     listening: true

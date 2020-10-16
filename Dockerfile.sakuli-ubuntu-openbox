@@ -82,7 +82,11 @@ RUN apt-get update && \
                     xterm \
                     x11-xkb-utils \
                     libnss-wrapper \
-                    gettext && \
+                    gettext \
+                    curl \
+                    iputils-ping \
+                    iputils-tracepath \
+                    dnsutils && \
     apt-get clean -y && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
