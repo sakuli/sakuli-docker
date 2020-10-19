@@ -29,7 +29,7 @@ All notable changes to this project will be documented in this file.
 - Bugfix: terminal pops up sometimes [(#17)](https://github.com/sakuli/sakuli-docker/issues/17)
 - Feature: Enable importing custom CAs [(#13)](https://github.com/sakuli/sakuli-docker/issues/13)
 
-## v2.20 (Initial Version)
+## v2.2.0 (Initial Version)
 
 - Bugfix: Desktop fails to start properly and causes test failures [(#7)](https://github.com/sakuli/sakuli-docker/issues/7)
 - Feature: Add git to image [(#2)](https://github.com/sakuli/sakuli-docker/pull/2)
