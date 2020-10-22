@@ -58,8 +58,8 @@ popd
 
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
-  [[ $DEBUG == true ]] && echo "Restoring testsuite to ${SAKULI_TEST_SUITE}."
-  RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/* ${SAKULI_TEST_SUITE}/.. --exclude='*' --include='***/_logs'"
+  [[ $DEBUG == true ]] && echo "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}."
+  RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
   if [[ $DEBUG == true ]]; then
       echo "${RESTORE_COMMAND}"
       ${RESTORE_COMMAND}
