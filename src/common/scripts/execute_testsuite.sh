@@ -50,6 +50,12 @@ $@
 SAKULI_RETURN_CODE=$?
 popd
 
+# unlink global node_modules in ${SAKULI_EXECUTION_DIR}
+[[ $DEBUG == true ]] && echo "remove global node_modules link from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
+[ -L "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
+[[ $DEBUG == true ]] && echo "remove global node_modules link from ${SAKULI_EXECUTION_DIR}."
+[ -L "${SAKULI_EXECUTION_DIR}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/node_modules
+
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
   [[ $DEBUG == true ]] && echo "Restoring testsuite to ${SAKULI_TEST_SUITE}."
@@ -62,11 +68,5 @@ if [ -z "$GIT_URL" ]; then
   fi
   [ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots due to insufficient permissions."
 fi
-
-# unlink global node_modules in ${SAKULI_EXECUTION_DIR}
-[[ $DEBUG == true ]] && echo "Unlink global node_modules from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
-[ -L "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules" ] && unlink ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
-[[ $DEBUG == true ]] && echo "Unlink global node_modules from ${SAKULI_EXECUTION_DIR}."
-[ -L "${SAKULI_EXECUTION_DIR}/node_modules" ] && unlink ${SAKULI_EXECUTION_DIR}/node_modules
 
 exit ${SAKULI_RETURN_CODE}
