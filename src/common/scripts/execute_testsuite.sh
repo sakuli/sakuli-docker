@@ -10,28 +10,39 @@ else
     RSYNC_OPTIONS="${RSYNC_OPTIONS}q"
 fi
 
+logDebug(){
+  [[ $DEBUG == true ]] && echo "${@}"
+  return 0
+}
 
 SAKULI_SUITE_NAME=""
 getTestSuiteName(){
   echo $1 | rev | cut -d "/" -f 1 | rev
 }
-[[ $DEBUG == true ]] && echo "Syncing test suite to execution environment."
+
+syncToExecutionDir(){
+  SAKULI_SUITE_NAME=$(getTestSuiteName ${1})
+  logDebug "Syncing project files"
+  rsync ${RSYNC_OPTIONS} ${1}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
+  logDebug "Syncing test suite"
+  rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
+}
+
+logDebug "Syncing test suite to execution environment."
 if [ "${SAKULI_TEST_SUITE}" ]; then
-  rsync ${RSYNC_OPTIONS} ${SAKULI_TEST_SUITE}/../* ${SAKULI_EXECUTION_DIR} --exclude node_modules
-  SAKULI_SUITE_NAME=$(getTestSuiteName ${SAKULI_TEST_SUITE})
+  syncToExecutionDir ${SAKULI_TEST_SUITE}
 elif [ "${GIT_URL}" ]; then
   echo "------------------ Cloning git repository ------------------"
   GIT_REPOSITORY_DIR=/headless/git-repository
   git clone $GIT_URL $GIT_REPOSITORY_DIR
-  rsync ${RSYNC_OPTIONS} ${GIT_REPOSITORY_DIR}/${GIT_CONTEXT_DIR}/../* ${SAKULI_EXECUTION_DIR} --exclude node_modules
-  SAKULI_SUITE_NAME=$(getTestSuiteName ${GIT_CONTEXT_DIR})
+  syncToExecutionDir ${GIT_REPOSITORY_DIR}/${GIT_CONTEXT_DIR}
 fi
 
 # Link global node_modules into ${SAKULI_EXECUTION_DIR}
 GLOBAL_NODE_MODULES_PATH=$(npm root -g | head -n 1)
-[[ $DEBUG == true ]] && echo "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
+logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
 ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
-[[ $DEBUG == true ]] && echo "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}."
+logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}."
 ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/node_modules
 
 # exit != 0 does not abort script execution anymore
@@ -51,17 +62,17 @@ SAKULI_RETURN_CODE=$?
 popd
 
 # unlink global node_modules in ${SAKULI_EXECUTION_DIR}
-[[ $DEBUG == true ]] && echo "remove global node_modules link from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
+logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
 [ -L "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
-[[ $DEBUG == true ]] && echo "remove global node_modules link from ${SAKULI_EXECUTION_DIR}."
+logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}."
 [ -L "${SAKULI_EXECUTION_DIR}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/node_modules
 
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
-  [[ $DEBUG == true ]] && echo "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}."
+  logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}."
   RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
+  logDebug "${RESTORE_COMMAND}"
   if [[ $DEBUG == true ]]; then
-      echo "${RESTORE_COMMAND}"
       ${RESTORE_COMMAND}
   else
       ${RESTORE_COMMAND} 2>/dev/null
