@@ -55,7 +55,7 @@ else
   pushd ${SAKULI_EXECUTION_DIR}
 fi
 # unknown option ==> call command
-echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
+echo -e "\n\n------------------ EXECUTE SAKULI ------------------"
 echo "Executing command: '$@'"
 $@
 SAKULI_RETURN_CODE=$?
