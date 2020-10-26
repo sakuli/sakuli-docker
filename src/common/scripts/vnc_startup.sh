@@ -73,4 +73,11 @@ if [[ $DEBUG == true ]]; then
     tail ${TAIL_PARAMETERS} $STARTUPDIR/*.log $HOME/.vnc/*$DISPLAY.log
 fi
 
-$STARTUPDIR/execute_testsuite.sh "$@"
+if [[ "${SAKULI_TEST_SUITE}" || "${GIT_URL}" ]]; then
+  echo "Executing Testsuite"
+  "$STARTUPDIR"/execute_testsuite.sh "$@"
+else
+  echo -e "\n\n------------------ EXECUTE COMMAND ------------------"
+  echo "Executing command: '$@'"
+  $@
+fi
