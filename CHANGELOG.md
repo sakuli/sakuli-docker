@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Enhancement: Add ip-utils and curl for debugging purposes [(#79)](https://github.com/sakuli/sakuli-docker/issues/79)
 - Feature: Redirect log output to stdout in container by default [(#70)](https://github.com/sakuli/sakuli-docker/issues/70)
 - Bugfix: Running container mode suppresses test suite execution [(#61)](https://github.com/sakuli/sakuli-docker/issues/61)
+- Bugfix: Start container with different command AND different user [(#75)](https://github.com/sakuli/sakuli-docker/issues/75)
 
 
 ## v2.4.0-1
