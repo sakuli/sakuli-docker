@@ -22,13 +22,22 @@ getTestSuiteName(){
 
 syncToExecutionDir(){
   SAKULI_SUITE_NAME=$(getTestSuiteName ${1})
-  logDebug "Syncing project files"
-  rsync ${RSYNC_OPTIONS} ${1}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
-  logDebug "Syncing test suite"
-  rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
+  if [[ -f ${1}/testsuite.properties && -f ${1}/testsuite.suite ]]; then
+    logDebug "Syncing project files"
+    rsync ${RSYNC_OPTIONS} ${1}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
+    logDebug "Syncing test suite"
+    rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
+  else
+    SAKULI_SUITE_NAME=$( cat ${1}/package.json | grep \"test\" | xargs | cut -d " " -f 4 | rev | cut -c2- | rev )
+    logDebug "Found suite name from project package.json: ${SAKULI_SUITE_NAME}"
+    logDebug "Syncing project files"
+    rsync ${RSYNC_OPTIONS} ${1}/* ${SAKULI_EXECUTION_DIR} --exclude='*/'
+    logDebug "Syncing test suite"
+    rsync ${RSYNC_OPTIONS} ${1}/${SAKULI_SUITE_NAME} ${SAKULI_EXECUTION_DIR} --exclude=node_modules --exclude=_logs/_screenshots
+  fi
 }
 
-logDebug "Syncing test suite to execution environment."
+logDebug "Syncing test suite to execution environment"
 if [ "${SAKULI_TEST_SUITE}" ]; then
   syncToExecutionDir ${SAKULI_TEST_SUITE}
 elif [ "${GIT_URL}" ]; then
@@ -62,15 +71,20 @@ SAKULI_RETURN_CODE=$?
 popd
 
 # unlink global node_modules in ${SAKULI_EXECUTION_DIR}
-logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
+logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}"
 [ -L "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
-logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}."
+logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}"
 [ -L "${SAKULI_EXECUTION_DIR}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/node_modules
 
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
-  logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}."
-  RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
+  if [[ -f ${SAKULI_TEST_SUITE}/testsuite.properties && -f ${SAKULI_TEST_SUITE}/testsuite.suite ]]; then
+    logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
+    RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
+  else
+    logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}/${SAKULI_SUITE_NAME}"
+    RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}/${SAKULI_SUITE_NAME}"
+  fi
   logDebug "${RESTORE_COMMAND}"
   if [[ $DEBUG == true ]]; then
       ${RESTORE_COMMAND}
