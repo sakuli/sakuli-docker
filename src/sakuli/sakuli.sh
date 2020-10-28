@@ -5,26 +5,23 @@ set -e
 echo "Reloading $HOME/.bashrc"
 source $HOME/.bashrc
 
-echo "nvm use $1"
-nvm use $1
-
-echo "//registry.npmjs.org/:_authToken=$3" > $HOME/.npmrc
+echo "//registry.npmjs.org/:_authToken=$2" > $HOME/.npmrc
 npm whoami
 
-echo "Installing Sakuli v$2"
-npm i -g -E @sakuli/cli@$2
+echo "Installing Sakuli v$1"
+npm i -g -E @sakuli/cli@$1
 
-echo "Installing Sakuli legacy v$2"
-npm i -g -E @sakuli/legacy@$2
+echo "Installing Sakuli legacy v$1"
+npm i -g -E @sakuli/legacy@$1
 
-echo "Installing Sakuli legacy-types v$2"
-npm i -g -E @sakuli/legacy-types@$2
+echo "Installing Sakuli legacy-types v$1"
+npm i -g -E @sakuli/legacy-types@$1
 
 forwarders=("gearman" "checkmk" "icinga2" "prometheus")
 for fwd in "${forwarders[@]}"
 do
-    echo "Installing Sakuli forwarder $fwd v$2"
-    npm i -g -E @sakuli/forwarder-$fwd@$2
+    echo "Installing Sakuli forwarder $fwd v$1"
+    npm i -g -E @sakuli/forwarder-$fwd@$1
 done
 
 echo "Installing TypeScript v3.8.3"
