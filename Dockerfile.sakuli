@@ -29,6 +29,10 @@ USER 0
 ### Create SAKULI_EXECUTION_DIR and set permissions correctly
 RUN mkdir ${SAKULI_EXECUTION_DIR} && chmod 777 ${SAKULI_EXECUTION_DIR}
 
+### configure startup
+COPY ./src/common/scripts $STARTUPDIR
+RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR
+
 COPY ./src/sakuli/sakuli.sh $INST_SCRIPTS/
 RUN chmod a+x $INST_SCRIPTS/sakuli.sh
 

@@ -92,13 +92,7 @@ COPY ./src/common/env/ $STARTUPDIR/env
 COPY ./src/common/firefox_profile/certificate-profile $HOME/firefox-certificates/
 COPY ./src/common/chrome_certificate_store/ $HOME/.pki/
 
-### configure startup
-COPY ./src/common/scripts $STARTUPDIR
-RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
-
-### configure startup
-COPY ./src/common/scripts $STARTUPDIR
-RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
+RUN $INST_SCRIPTS/set_user_permission.sh $HOME
 
 USER 1000:1000
 
