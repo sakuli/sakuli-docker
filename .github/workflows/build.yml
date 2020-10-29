@@ -31,6 +31,6 @@ jobs:
         run: |
           export PATH=$PATH:$HOME
           ./build-base.sh ${{ secrets.NODE_VERSION }}
-          ./build-latest.sh $SAKULI_VERSION ${{ secrets.NODE_VERSION }}
+          ./build-latest.sh $SAKULI_VERSION ${{ secrets.NPM_TOKEN }}
         env:
           SAKULI_LICENSE_KEY: ${{ secrets.SAKULI_LICENSE_KEY }}

@@ -10,13 +10,6 @@ ARG BUILD_DATE
 RUN test -n "${NODE_VERSION}" && \
     test -n "${BUILD_DATE}"
 
-LABEL maintainer="simon.hofmann@consol.de" \
-    io.k8s.description="Sakuli Base Container with OpenBox window manager" \
-    io.k8s.display-name="Sakuli Base Container based on Ubuntu" \
-    io.openshift.expose-services="6901:http,5901:xvnc" \
-    io.openshift.tags="vnc, ubuntu, openbox" \
-    io.openshift.non-scalable=true
-
 ENV REFRESHED_AT=${BUILD_DATE} \
     LANG='en_US.UTF-8' \
     LANGUAGE='en_US:en' \
