@@ -24,6 +24,11 @@ ENV REFRESHED_AT=${BUILD_DATE} \
     SAKULI_EXECUTION_DIR=/testsuite_execution \
     LOG_MODE=ci
 
+### Install Sakuli
+COPY --chown=1000:1000 ./src/sakuli/sakuli.sh $HOME/
+RUN chmod a+x $HOME/sakuli.sh && \
+    $HOME/sakuli.sh $SAKULI_VERSION $NPM_ACCESS_TOKEN
+
 USER 0
 
 ### Create SAKULI_EXECUTION_DIR and set permissions correctly
@@ -33,13 +38,7 @@ RUN mkdir ${SAKULI_EXECUTION_DIR} && chmod 777 ${SAKULI_EXECUTION_DIR}
 COPY ./src/common/scripts $STARTUPDIR
 RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR
 
-COPY ./src/sakuli/sakuli.sh $INST_SCRIPTS/
-RUN chmod a+x $INST_SCRIPTS/sakuli.sh
-
 USER 1000:1000
-
-### Install Sakuli
-RUN $INST_SCRIPTS/sakuli.sh $SAKULI_VERSION $NPM_ACCESS_TOKEN
 
 RUN $INST_SCRIPTS/startup.sh
 
