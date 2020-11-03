@@ -28,12 +28,8 @@ syncToExecutionDir(){
     logDebug "Syncing test suite"
     rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
   else
-    SAKULI_SUITE_NAME=$( cat ${1}/package.json | grep \"test\" | xargs | cut -d " " -f 4 | rev | cut -c2- | rev )
-    logDebug "Found suite name from project package.json: ${SAKULI_SUITE_NAME}"
-    logDebug "Syncing project files"
-    rsync ${RSYNC_OPTIONS} ${1}/* ${SAKULI_EXECUTION_DIR} --exclude='*/'
-    logDebug "Syncing test suite"
-    rsync ${RSYNC_OPTIONS} ${1}/${SAKULI_SUITE_NAME} ${SAKULI_EXECUTION_DIR} --exclude=node_modules --exclude=_logs/_screenshots
+    printf '\n%s\n' "ERROR: SAKULI_TEST_SUITE does not contain a valid Sakuli suite" >&2
+    exit 1
   fi
 }
 
@@ -78,13 +74,8 @@ logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}"
 
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
-  if [[ -f ${SAKULI_TEST_SUITE}/testsuite.properties && -f ${SAKULI_TEST_SUITE}/testsuite.suite ]]; then
-    logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
-    RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
-  else
-    logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}/${SAKULI_SUITE_NAME}"
-    RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}/${SAKULI_SUITE_NAME}"
-  fi
+  logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
+  RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
   logDebug "${RESTORE_COMMAND}"
   if [[ $DEBUG == true ]]; then
       ${RESTORE_COMMAND}
