@@ -22,13 +22,18 @@ getTestSuiteName(){
 
 syncToExecutionDir(){
   SAKULI_SUITE_NAME=$(getTestSuiteName ${1})
-  logDebug "Syncing project files"
-  rsync ${RSYNC_OPTIONS} ${1}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
-  logDebug "Syncing test suite"
-  rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
+  if [[ -f ${1}/testsuite.properties && -f ${1}/testsuite.suite ]]; then
+    logDebug "Syncing project files"
+    rsync ${RSYNC_OPTIONS} ${1}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
+    logDebug "Syncing test suite"
+    rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
+  else
+    printf '\n%s\n' "ERROR: SAKULI_TEST_SUITE does not contain the Path to a valid Sakuli suite" >&2
+    exit 1
+  fi
 }
 
-logDebug "Syncing test suite to execution environment."
+logDebug "Syncing test suite to execution environment"
 if [ "${SAKULI_TEST_SUITE}" ]; then
   syncToExecutionDir ${SAKULI_TEST_SUITE}
 elif [ "${GIT_URL}" ]; then
@@ -62,14 +67,14 @@ SAKULI_RETURN_CODE=$?
 popd
 
 # unlink global node_modules in ${SAKULI_EXECUTION_DIR}
-logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
+logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}"
 [ -L "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
-logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}."
+logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}"
 [ -L "${SAKULI_EXECUTION_DIR}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/node_modules
 
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
-  logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}."
+  logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
   RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
   logDebug "${RESTORE_COMMAND}"
   if [[ $DEBUG == true ]]; then

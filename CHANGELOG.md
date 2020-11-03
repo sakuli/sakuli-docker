@@ -9,6 +9,7 @@ All notable changes to this project will be documented in this file.
 - Feature: Redirect log output to stdout in container by default [(#70)](https://github.com/sakuli/sakuli-docker/issues/70)
 - Bugfix: Running container mode suppresses test suite execution [(#61)](https://github.com/sakuli/sakuli-docker/issues/61)
 - Bugfix: Start container with different command AND different user [(#75)](https://github.com/sakuli/sakuli-docker/issues/75)
+- Bugfix: dont rsync / if SAKULI_TEST_SUITE is the same location than test project [(#76)](https://github.com/sakuli/sakuli-docker/issues/76)
 
 
 ## v2.4.0-1
