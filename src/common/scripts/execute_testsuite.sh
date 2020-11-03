@@ -28,7 +28,7 @@ syncToExecutionDir(){
     logDebug "Syncing test suite"
     rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
   else
-    printf '\n%s\n' "ERROR: SAKULI_TEST_SUITE does not contain a valid Sakuli suite" >&2
+    printf '\n%s\n' "ERROR: SAKULI_TEST_SUITE does not contain the Path to a valid Sakuli suite" >&2
     exit 1
   fi
 }
