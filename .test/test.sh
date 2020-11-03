@@ -46,6 +46,17 @@ docker run \
 [[ "$?" == "0" ]] && echo "Expected error code != 0" && exit 1
 set -e
 
+# should fail if no license is provided
+set +e
+docker run \
+    --rm \
+    -e SAKULI_TEST_SUITE=/testsuite/e2e-broken \
+    -v $(pwd)/e2e:/testsuite \
+    --shm-size=2G \
+    taconsol/sakuli:${1:-latest}
+[[ "$?" == "0" ]] && echo "Expected to fail because of missing license key" && exit 1
+set -e
+
 # start another command than sakuli
 docker run \
     --rm \
