@@ -53,3 +53,12 @@ docker run \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest} \
     "echo success!"
+
+# start with different user and another command than sakuli
+docker run \
+    --rm \
+    -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
+    --shm-size=2G \
+    -u 45678:12345 \
+    taconsol/sakuli:${1:-latest}  \
+    "echo success!"
