@@ -24,10 +24,11 @@ jobs:
         curl -L https://github.com/aelsabbahy/goss/releases/latest/download/dgoss -o $HOME/dgoss
         chmod +rx $HOME/dgoss
     - name: Set SAKULI_VERSION to next
-      run: echo "::set-env name=SAKULI_VERSION::next"
+      run: echo "SAKULI_VERSION=next" >> $GITHUB_ENV
+    - name: Add HOME directory to PATH
+      run: echo "$HOME" >> $GITHUB_PATH
     - name: Build and test image
       run: |
-        export PATH=$PATH:$HOME
         ./build-base.sh ${{ secrets.NODE_VERSION }}
         ./build-latest.sh $SAKULI_VERSION ${{ secrets.NPM_TOKEN }}
       env:
