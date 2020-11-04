@@ -63,8 +63,7 @@ docker run \
     taconsol/sakuli:${1:-latest}  \
     "echo success!"
 
-# ensure error is thrown when
-set +e
+# start with project referenced in SAKULI_TEST_SUITE
 docker run \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
@@ -72,6 +71,4 @@ docker run \
     -v $(pwd)/e2e:/testsuite \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
-[[ "$?" != "1" ]] && echo "Expected error code == 1" && exit 1
-set -e
 

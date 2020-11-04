@@ -23,13 +23,12 @@ getTestSuiteName(){
 syncToExecutionDir(){
   SAKULI_SUITE_NAME=$(getTestSuiteName ${1})
   if [[ -f ${1}/testsuite.properties && -f ${1}/testsuite.suite ]]; then
-    logDebug "Syncing project files"
-    rsync ${RSYNC_OPTIONS} ${1}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
     logDebug "Syncing test suite"
+    rsync ${RSYNC_OPTIONS} ${1}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
     rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
   else
-    printf '\n%s\n' "ERROR: SAKULI_TEST_SUITE does not contain a valid Sakuli suite" >&2
-    exit 1
+    logDebug "Syncing project"
+    rsync ${RSYNC_OPTIONS} ${1}/* ${SAKULI_EXECUTION_DIR} --exclude=node_modules --exclude=_logs/_screenshots
   fi
 }
 
@@ -46,7 +45,9 @@ fi
 # Link global node_modules into ${SAKULI_EXECUTION_DIR}
 GLOBAL_NODE_MODULES_PATH=$(npm root -g | head -n 1)
 logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
-ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
+if [[ -f $${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.properties && -f ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.suite ]]; then
+  ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
+fi
 logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}."
 ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/node_modules
 
@@ -75,7 +76,12 @@ logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}"
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
   logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
-  RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
+  if [[ -f $${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.properties && -f ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.suite ]]; then
+     RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
+  else
+     RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/**/_logs ${SAKULI_TEST_SUITE}"
+  fi
+
   logDebug "${RESTORE_COMMAND}"
   if [[ $DEBUG == true ]]; then
       ${RESTORE_COMMAND}
