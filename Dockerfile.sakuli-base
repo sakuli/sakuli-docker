@@ -1,26 +1,14 @@
 # This Dockerfile is used to build an headles vnc image based on Ubuntu
 # Used to run CI jobs for nut.js
-
 ARG BASE_IMAGE_VERSION=18.04
 FROM ubuntu:$BASE_IMAGE_VERSION
 
 ARG NODE_VERSION
-ARG SAKULI_VERSION
-ARG NPM_ACCESS_TOKEN
 ARG BUILD_DATE
 
 # Ensure mandatory args are set
 RUN test -n "${NODE_VERSION}" && \
-    test -n "${SAKULI_VERSION}" && \
-    test -n "${NPM_ACCESS_TOKEN}" && \
     test -n "${BUILD_DATE}"
-
-LABEL maintainer="simon.hofmann@consol.de" \
-    io.k8s.description="Sakuli Test Container with OpenBox window manager" \
-    io.k8s.display-name="Sakuli Test Container based on Ubuntu" \
-    io.openshift.expose-services="6901:http,5901:xvnc" \
-    io.openshift.tags="vnc, ubuntu, openbox" \
-    io.openshift.non-scalable=true
 
 ENV REFRESHED_AT=${BUILD_DATE} \
     LANG='en_US.UTF-8' \
@@ -39,17 +27,11 @@ ENV REFRESHED_AT=${BUILD_DATE} \
     VNC_RESOLUTION=1280x1024 \
     VNC_PW=vncpassword \
     VNC_VIEW_ONLY=false \
-    NPM_TOKEN=REPLACE_WITH_YOUR_NPM_TOKEN \
-    IMG=taconsol/sakuli \
-    SAKULI_EXECUTION_DIR=/testsuite_execution \
-    LOG_MODE=ci
+    IMG=taconsol/sakuli-base
 
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
 WORKDIR $HOME
-
-### Create SAKULI_EXECUTION_DIR and set permissions correctly
-RUN mkdir ${SAKULI_EXECUTION_DIR} && chmod 777 ${SAKULI_EXECUTION_DIR}
 
 ### Copy all install scripts for further steps
 COPY ./src/common/install/ $INST_SCRIPTS/
@@ -110,18 +92,9 @@ COPY ./src/common/env/ $STARTUPDIR/env
 COPY ./src/common/firefox_profile/certificate-profile $HOME/firefox-certificates/
 COPY ./src/common/chrome_certificate_store/ $HOME/.pki/
 
-### configure startup
-COPY ./src/common/scripts $STARTUPDIR
-RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR $HOME
+RUN $INST_SCRIPTS/set_user_permission.sh $HOME
 
 USER 1000:1000
 
 ### Install nvm
 RUN $INST_SCRIPTS/nvm.sh $NODE_VERSION
-
-### Install Sakuli
-RUN $INST_SCRIPTS/sakuli.sh $NODE_VERSION $SAKULI_VERSION $NPM_ACCESS_TOKEN
-
-RUN $INST_SCRIPTS/startup.sh
-
-ENTRYPOINT ["/dockerstartup/startup.sh"]

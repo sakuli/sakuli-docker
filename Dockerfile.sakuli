@@ -1,0 +1,45 @@
+# This Dockerfile is used to build the Sakuli image from sakuli-base
+
+FROM taconsol/sakuli-base
+
+ARG SAKULI_VERSION
+ARG NPM_ACCESS_TOKEN
+ARG BUILD_DATE
+
+# Ensure mandatory args are set
+RUN test -n "${SAKULI_VERSION}" && \
+    test -n "${NPM_ACCESS_TOKEN}" && \
+    test -n "${BUILD_DATE}"
+
+LABEL maintainer="simon.hofmann@consol.de" \
+    io.k8s.description="Sakuli Test Container with OpenBox window manager" \
+    io.k8s.display-name="Sakuli Test Container based on Ubuntu" \
+    io.openshift.expose-services="6901:http,5901:xvnc" \
+    io.openshift.tags="vnc, ubuntu, openbox" \
+    io.openshift.non-scalable=true
+
+ENV REFRESHED_AT=${BUILD_DATE} \
+    IMG=taconsol/sakuli \
+    NPM_TOKEN=REPLACE_WITH_YOUR_NPM_TOKEN \
+    SAKULI_EXECUTION_DIR=/testsuite_execution \
+    LOG_MODE=ci
+
+### Install Sakuli
+COPY --chown=1000:1000 ./src/sakuli/sakuli.sh $HOME/
+RUN chmod a+x $HOME/sakuli.sh && \
+    $HOME/sakuli.sh $SAKULI_VERSION $NPM_ACCESS_TOKEN
+
+USER 0
+
+### Create SAKULI_EXECUTION_DIR and set permissions correctly
+RUN mkdir ${SAKULI_EXECUTION_DIR} && chmod 777 ${SAKULI_EXECUTION_DIR}
+
+### configure startup
+COPY ./src/common/scripts $STARTUPDIR
+RUN $INST_SCRIPTS/set_user_permission.sh $STARTUPDIR
+
+USER 1000:1000
+
+RUN $INST_SCRIPTS/startup.sh
+
+ENTRYPOINT ["/dockerstartup/startup.sh"]
