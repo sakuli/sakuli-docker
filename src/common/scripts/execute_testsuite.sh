@@ -20,9 +20,14 @@ getTestSuiteName(){
   echo $1 | rev | cut -d "/" -f 1 | rev
 }
 
+isTestSuite(){
+  test -f ${1}/testsuite.properties && test -f ${1}/testsuite.suite
+  return $?
+}
+
 syncToExecutionDir(){
   SAKULI_SUITE_NAME=$(getTestSuiteName ${1})
-  if [[ -f ${1}/testsuite.properties && -f ${1}/testsuite.suite ]]; then
+  if isTestSuite ${1}; then
     logDebug "Syncing test suite"
     rsync ${RSYNC_OPTIONS} ${1}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
     rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
@@ -45,7 +50,7 @@ fi
 # Link global node_modules into ${SAKULI_EXECUTION_DIR}
 GLOBAL_NODE_MODULES_PATH=$(npm root -g | head -n 1)
 logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
-if [[ -f $${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.properties && -f ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.suite ]]; then
+if isTestSuite ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}; then
   ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
 fi
 logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}."
@@ -76,7 +81,7 @@ logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}"
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
   logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
-  if [[ -f ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.properties && -f ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.suite ]]; then
+  if isTestSuite ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}; then
      RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
   else
     pushd ${SAKULI_EXECUTION_DIR}
