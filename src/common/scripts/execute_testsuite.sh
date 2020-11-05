@@ -76,10 +76,17 @@ logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}"
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
   logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
-  if [[ -f $${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.properties && -f ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.suite ]]; then
+  if [[ -f ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.properties && -f ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/testsuite.suite ]]; then
      RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
   else
-     RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/**/_logs ${SAKULI_TEST_SUITE}"
+    pushd ${SAKULI_EXECUTION_DIR}
+    SUITES=$(ls -d */)
+    for SUITE in ${SUITES}; do
+      if [[ -d ${SUITE}/_logs ]]; then
+        rsync ${RSYNC_OPTIONS} ${SUITE}/_logs ${SAKULI_TEST_SUITE}/${SUITE}/
+      fi
+    done
+    popd
   fi
 
   logDebug "${RESTORE_COMMAND}"
