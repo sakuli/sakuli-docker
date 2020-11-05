@@ -10,8 +10,8 @@ dgoss run \
 docker run \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
-    -e SAKULI_TEST_SUITE=/testsuite/e2e-suite \
-    -v $(pwd)/e2e:/testsuite \
+    -e SAKULI_TEST_SUITE=/sakuli-project/e2e-suite \
+    -v $(pwd)/e2e:/sakuli-project \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
 
@@ -19,8 +19,8 @@ docker run \
 docker run \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
-    -e SAKULI_TEST_SUITE=/testsuite/e2e-suite \
-    -v $(pwd)/e2e:/testsuite \
+    -e SAKULI_TEST_SUITE=/sakuli-project/e2e-suite \
+    -v $(pwd)/e2e:/sakuli-project \
     -u 45678:12345 \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
@@ -39,8 +39,8 @@ set +e
 docker run \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
-    -e SAKULI_TEST_SUITE=/testsuite/e2e-broken \
-    -v $(pwd)/e2e:/testsuite \
+    -e SAKULI_TEST_SUITE=/sakuli-project/e2e-broken \
+    -v $(pwd)/e2e:/sakuli-project \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
 [[ "$?" == "0" ]] && echo "Expected error code != 0" && exit 1
@@ -50,8 +50,8 @@ set -e
 set +e
 docker run \
     --rm \
-    -e SAKULI_TEST_SUITE=/testsuite/e2e-broken \
-    -v $(pwd)/e2e:/testsuite \
+    -e SAKULI_TEST_SUITE=/sakuli-project/e2e-broken \
+    -v $(pwd)/e2e:/sakuli-project \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
 [[ "$?" == "0" ]] && echo "Expected to fail because of missing license key" && exit 1
@@ -78,8 +78,8 @@ docker run \
 docker run \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
-    -e SAKULI_TEST_SUITE=/testsuite \
-    -v $(pwd)/e2e:/testsuite \
+    -e SAKULI_TEST_SUITE=/sakuli-project \
+    -v $(pwd)/e2e:/sakuli-project \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
 
