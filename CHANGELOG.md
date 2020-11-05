@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Bugfix: Running container mode suppresses test suite execution [(#61)](https://github.com/sakuli/sakuli-docker/issues/61)
 - Bugfix: Start container with different command AND different user [(#75)](https://github.com/sakuli/sakuli-docker/issues/75)
 - Bugfix: dont rsync / if SAKULI_TEST_SUITE is the same location than test project [(#76)](https://github.com/sakuli/sakuli-docker/issues/76)
+- Bugfix: [dont rsync /](https://github.com/sakuli/sakuli-docker/issues/76) broke sakuli S2I contract [(#90)](https://github.com/sakuli/sakuli-docker/issues/90)
 
 
 ## v2.4.0-1
