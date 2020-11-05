@@ -66,7 +66,6 @@ fi
 
 # Link global node_modules into ${SAKULI_EXECUTION_DIR}
 GLOBAL_NODE_MODULES_PATH=$(npm root -g | head -n 1)
-logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
 if isTestSuite ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}; then
   ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
 fi
