@@ -55,9 +55,11 @@ restoreLogs(){
     mkdir "${SAKULI_LOG_DESTINATION_FOLDER}"
   fi
   cat ${SAKULI_LOG_SOURCE} >> ${SAKULI_LOG_DESTINATION}
+  [ $? -ne 0 ] && echo -e "ERROR: Could not restore sakuli.log to ${SAKULI_LOG_DESTINATION}"
 
   if [ -d "${SCREENSHOT_SOURCE}" ]; then
     rsync ${RSYNC_OPTIONS} ${SCREENSHOT_SOURCE}/* ${SCREENSHOT_DESTINATION}
+    [ $? -ne 0 ] && echo -e "ERROR: Could not restore screenshots to ${SCREENSHOT_DESTINATION}"
   fi
 }
 
