@@ -10,12 +10,12 @@ else
     RSYNC_OPTIONS="${RSYNC_OPTIONS}q"
 fi
 
+### Function declaration
 logDebug(){
   [[ $DEBUG == true ]] && echo "${@}"
   return 0
 }
 
-SAKULI_SUITE_NAME=""
 getTestSuiteName(){
   echo $1 | rev | cut -d "/" -f 1 | rev
 }
@@ -26,25 +26,43 @@ isTestSuite(){
 }
 
 syncToExecutionDir(){
-  SAKULI_SUITE_NAME=$(getTestSuiteName ${1})
-  if isTestSuite ${1}; then
+  SOURCE_DIR=${1}
+  SAKULI_SUITE_NAME=${2}
+  if isTestSuite ${SOURCE_DIR}; then
     logDebug "Syncing test suite"
-    rsync ${RSYNC_OPTIONS} ${1}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
-    rsync ${RSYNC_OPTIONS} ${1}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
+    rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
+    rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
   else
     logDebug "Syncing project"
-    rsync ${RSYNC_OPTIONS} ${1}/* ${SAKULI_EXECUTION_DIR} --exclude=node_modules --exclude=_logs/_screenshots
+    rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/* ${SAKULI_EXECUTION_DIR} --exclude=node_modules --exclude=_logs/_screenshots
   fi
 }
 
+executeRestoreCommand(){
+  RESTORE_COMMAND="${1}"
+  RESTORE_DESTINATION="${2}"
+  logDebug "${RESTORE_COMMAND}"
+  if [[ $DEBUG == true ]]; then
+     ${RESTORE_COMMAND}
+  else
+     ${RESTORE_COMMAND} 2>/dev/null
+  fi
+  [ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots to ${RESTORE_DESTINATION}"
+}
+
+### Main
+SAKULI_SUITE_NAME=""
+
 logDebug "Syncing test suite to execution environment"
 if [ "${SAKULI_TEST_SUITE}" ]; then
-  syncToExecutionDir ${SAKULI_TEST_SUITE}
+  SAKULI_SUITE_NAME=$(getTestSuiteName ${SAKULI_TEST_SUITE})
+  syncToExecutionDir "${SAKULI_TEST_SUITE}" "${SAKULI_SUITE_NAME}"
 elif [ "${GIT_URL}" ]; then
   echo "------------------ Cloning git repository ------------------"
   GIT_REPOSITORY_DIR=/headless/git-repository
   git clone $GIT_URL $GIT_REPOSITORY_DIR
-  syncToExecutionDir ${GIT_REPOSITORY_DIR}/${GIT_CONTEXT_DIR}
+  SAKULI_SUITE_NAME=$(getTestSuiteName ${GIT_REPOSITORY_DIR}/${GIT_CONTEXT_DIR})
+  syncToExecutionDir "${GIT_REPOSITORY_DIR}/${GIT_CONTEXT_DIR}" "${SAKULI_SUITE_NAME}"
 fi
 
 # Link global node_modules into ${SAKULI_EXECUTION_DIR}
@@ -83,24 +101,18 @@ if [ -z "$GIT_URL" ]; then
   logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
   if isTestSuite ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}; then
      RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
+     executeRestoreCommand "${RESTORE_COMMAND}" "${SAKULI_SUITE_NAME}/_logs"
   else
     pushd ${SAKULI_EXECUTION_DIR}
     SUITES=$(ls -d */)
     for SUITE in ${SUITES}; do
       if [[ -d ${SUITE}/_logs ]]; then
-        rsync ${RSYNC_OPTIONS} ${SUITE}/_logs ${SAKULI_TEST_SUITE}/${SUITE}/
+       RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SUITE}/_logs ${SAKULI_TEST_SUITE}/${SUITE}/"
+       executeRestoreCommand "${RESTORE_COMMAND}" "${SUITE}/_logs"
       fi
     done
     popd
   fi
-
-  logDebug "${RESTORE_COMMAND}"
-  if [[ $DEBUG == true ]]; then
-      ${RESTORE_COMMAND}
-  else
-      ${RESTORE_COMMAND} 2>/dev/null
-  fi
-  [ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots due to insufficient permissions."
 fi
 
 exit ${SAKULI_RETURN_CODE}
