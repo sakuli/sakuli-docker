@@ -29,11 +29,11 @@ syncToExecutionDir(){
   SOURCE_DIR=${1}
   SAKULI_SUITE_NAME=${2}
   if isTestSuite ${SOURCE_DIR}; then
-    logDebug "Syncing test suite"
+    logDebug "Syncing test suite to execution environment"
     rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
     rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
   else
-    logDebug "Syncing project"
+    logDebug "Syncing project to execution environment"
     rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/* ${SAKULI_EXECUTION_DIR} --exclude=node_modules --exclude=_logs/_screenshots
   fi
 }
@@ -53,7 +53,6 @@ executeRestoreCommand(){
 ### Main
 SAKULI_SUITE_NAME=""
 
-logDebug "Syncing test suite to execution environment"
 if [ "${SAKULI_TEST_SUITE}" ]; then
   SAKULI_SUITE_NAME=$(getTestSuiteName ${SAKULI_TEST_SUITE})
   syncToExecutionDir "${SAKULI_TEST_SUITE}" "${SAKULI_SUITE_NAME}"
