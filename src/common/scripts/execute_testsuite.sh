@@ -90,12 +90,6 @@ $@
 SAKULI_RETURN_CODE=$?
 popd
 
-# unlink global node_modules in ${SAKULI_EXECUTION_DIR}
-logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}"
-[ -L "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
-logDebug "remove global node_modules link from ${SAKULI_EXECUTION_DIR}"
-[ -L "${SAKULI_EXECUTION_DIR}/node_modules" ] && rm ${SAKULI_EXECUTION_DIR}/node_modules
-
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
   logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
