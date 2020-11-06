@@ -31,23 +31,36 @@ syncToExecutionDir(){
   if isTestSuite ${SOURCE_DIR}; then
     logDebug "Syncing test suite to execution environment"
     rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/../* ${SAKULI_EXECUTION_DIR} --exclude='*/'
-    rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs/_screenshots
+    rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/ ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME} --exclude=node_modules --exclude=_logs
   else
     logDebug "Syncing project to execution environment"
-    rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/* ${SAKULI_EXECUTION_DIR} --exclude=node_modules --exclude=_logs/_screenshots
+    rsync ${RSYNC_OPTIONS} ${SOURCE_DIR}/* ${SAKULI_EXECUTION_DIR} --exclude=node_modules --exclude=_logs
   fi
 }
 
-executeRestoreCommand(){
-  RESTORE_COMMAND="${1}"
-  RESTORE_DESTINATION="${2}"
-  logDebug "${RESTORE_COMMAND}"
-  if [[ $DEBUG == true ]]; then
-     ${RESTORE_COMMAND}
-  else
-     ${RESTORE_COMMAND} 2>/dev/null
+restoreLogs(){
+  SOURCE=${1}
+  DESTINATION=${2}
+  LOG_FOLDER="_logs"
+  LOG_LOCATION="${LOG_FOLDER}/sakuli.log"
+  SCREENSHOT_LOCATION="${LOG_FOLDER}/_screenshots"
+
+  SAKULI_LOG_SOURCE="${SOURCE}/${LOG_LOCATION}"
+  SCREENSHOT_SOURCE="${SOURCE}/${SCREENSHOT_LOCATION}"
+  SAKULI_LOG_DESTINATION_FOLDER="${DESTINATION}/${LOG_FOLDER}"
+  SAKULI_LOG_DESTINATION="${DESTINATION}/${LOG_LOCATION}"
+  SCREENSHOT_DESTINATION="${DESTINATION}/${SCREENSHOT_LOCATION}"
+
+  if ! [ -d  "${SAKULI_LOG_DESTINATION_FOLDER}" ]; then
+    mkdir "${SAKULI_LOG_DESTINATION_FOLDER}"
   fi
-  [ $? -ne 0 ] && echo -e "ERROR: Could not restore logs and screenshots to ${RESTORE_DESTINATION}"
+  cat ${SAKULI_LOG_SOURCE} >> ${SAKULI_LOG_DESTINATION}
+  [ $? -ne 0 ] && echo -e "ERROR: Could not restore sakuli.log to ${SAKULI_LOG_DESTINATION}"
+
+  if [ -d "${SCREENSHOT_SOURCE}" ]; then
+    rsync ${RSYNC_OPTIONS} ${SCREENSHOT_SOURCE}/* ${SCREENSHOT_DESTINATION}
+    [ $? -ne 0 ] && echo -e "ERROR: Could not restore screenshots to ${SCREENSHOT_DESTINATION}"
+  fi
 }
 
 ### Main
@@ -67,7 +80,7 @@ fi
 # Link global node_modules into ${SAKULI_EXECUTION_DIR}
 GLOBAL_NODE_MODULES_PATH=$(npm root -g | head -n 1)
 if isTestSuite ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}; then
-logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
+  logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}."
   ln -s ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/node_modules
 fi
 logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}."
@@ -92,20 +105,18 @@ popd
 ## Restore logs and screenshots into the actual mounted volume, if possible
 if [ -z "$GIT_URL" ]; then
   logDebug "Restoring logs and screenshots to ${SAKULI_TEST_SUITE}"
-  if isTestSuite ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}; then
-     RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/_logs ${SAKULI_TEST_SUITE}"
-     executeRestoreCommand "${RESTORE_COMMAND}" "${SAKULI_SUITE_NAME}/_logs"
+  pushd "${SAKULI_EXECUTION_DIR}"
+  if isTestSuite "${SAKULI_SUITE_NAME}"; then
+    restoreLogs "${SAKULI_SUITE_NAME}" "${SAKULI_TEST_SUITE}"
   else
-    pushd ${SAKULI_EXECUTION_DIR}
     SUITES=$(ls -d */)
     for SUITE in ${SUITES}; do
-      if [[ -d ${SUITE}/_logs ]]; then
-       RESTORE_COMMAND="rsync ${RSYNC_OPTIONS} ${SUITE}/_logs ${SAKULI_TEST_SUITE}/${SUITE}/"
-       executeRestoreCommand "${RESTORE_COMMAND}" "${SUITE}/_logs"
+      if [[ -d "${SUITE}/_logs/" ]]; then
+        restoreLogs "${SUITE}" "${SAKULI_TEST_SUITE}/${SUITE}"
       fi
     done
-    popd
   fi
+  popd
 fi
 
 exit ${SAKULI_RETURN_CODE}
