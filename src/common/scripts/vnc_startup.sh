@@ -47,13 +47,13 @@ $NO_VNC_HOME/utils/launch.sh --vnc localhost:$VNC_PORT --listen $NO_VNC_PORT &> 
 
 echo -e "\n------------------ start VNC server ------------------------"
 echo "remove old vnc locks to be a reattachable container"
-vncserver -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
+Xvnc -kill $DISPLAY &> $STARTUPDIR/vnc_startup.log \
     || rm -rfv /tmp/.X*-lock /tmp/.X11-unix &> $STARTUPDIR/vnc_startup.log \
     || echo "no locks present"
 
 echo -e "start vncserver with param: VNC_COL_DEPTH=$VNC_COL_DEPTH, VNC_RESOLUTION=$VNC_RESOLUTION\n..."
 if [[ $DEBUG == true ]]; then echo "vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION"; fi
-vncserver $DISPLAY -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION &> $STARTUPDIR/no_vnc_startup.log
+Xvnc $DISPLAY -quiet -depth $VNC_COL_DEPTH -geometry $VNC_RESOLUTION -verbose 1 &> $STARTUPDIR/no_vnc_startup.log &
 echo -e "start window manager\n..."
 $HOME/wm_startup.sh &> $STARTUPDIR/wm_startup.log
 
