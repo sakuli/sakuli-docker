@@ -77,8 +77,12 @@ RUN apt-get update && \
     echo TIGERVNC_VERSION=$TIGERVNC_VERSION && \
     wget -qO- https://dl.bintray.com/tigervnc/stable/tigervnc-$TIGERVNC_VERSION.x86_64.tar.gz | tar xz --strip 1 --no-same-owner --no-same-permissions -C / && \
     mkdir -p $NO_VNC_HOME/utils/websockify && \
-    wget -qO- https://github.com/novnc/noVNC/archive/v1.0.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME && \
-    wget -qO- https://github.com/novnc/websockify/archive/v0.6.1.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
+    NOVNC_VERSION=$(curl -s https://github.com/novnc/novnc/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev) && \
+    echo NOVNC_VERSION=$NOVNC_VERSION
+    wget -qO- https://github.com/novnc/noVNC/archive/$NOVNC_VERSION.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME && \
+    WEBSOCKIFY_VERSION=$(curl -s https://github.com/novnc/novnc/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev) && \
+    echo WEBSOCKIFY_VERSION=$WEBSOCKIFY_VERSION
+    wget -qO- https://github.com/novnc/websockify/archive/$WEBSOCKIFY_VERSION.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
     chmod +x -v $NO_VNC_HOME/utils/*.sh && \
     ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html && \
     ln -s /usr/bin/chromium-browser /usr/bin/google-chrome && \
