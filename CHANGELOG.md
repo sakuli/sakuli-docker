@@ -2,16 +2,13 @@
 
 All notable changes to this project will be documented in this file.
 
-## Upcoming Release
+## v2.4.0-2
 
-- Fix: Only sync required test suite on start + Only sync _logs back at the end [(#74)](https://github.com/sakuli/sakuli-docker/issues/74)
-- Enhancement: Add ip-utils and curl for debugging purposes [(#79)](https://github.com/sakuli/sakuli-docker/issues/79)
-- Feature: Redirect log output to stdout in container by default [(#70)](https://github.com/sakuli/sakuli-docker/issues/70)
+- Bugfix: Only sync required test suite on start + Only sync _logs back at the end [(#74)](https://github.com/sakuli/sakuli-docker/issues/74)
 - Bugfix: Running container mode suppresses test suite execution [(#61)](https://github.com/sakuli/sakuli-docker/issues/61)
 - Bugfix: Start container with different command AND different user [(#75)](https://github.com/sakuli/sakuli-docker/issues/75)
 - Bugfix: dont rsync / if SAKULI_TEST_SUITE is the same location than test project [(#76)](https://github.com/sakuli/sakuli-docker/issues/76)
 - Bugfix: [dont rsync / ...](https://github.com/sakuli/sakuli-docker/issues/76) broke sakuli S2I contract [(#90)](https://github.com/sakuli/sakuli-docker/issues/90)
-
 
 ## v2.4.0-1
 
