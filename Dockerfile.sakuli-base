@@ -73,7 +73,9 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
     locale-gen en_US.UTF-8 && \
-    wget -qO- https://dl.bintray.com/tigervnc/stable/tigervnc-1.9.0.x86_64.tar.gz | tar xz --strip 1 --no-same-owner --no-same-permissions -C / && \
+    TIGERVNC_VERSION=$(curl -s https://dl.bintray.com/tigervnc/stable/ | grep x86_64.tar.gz | grep -v debug | cut -f2 -d - | cut -f1-3 -d. | sort -V -r | head -n 1) && \
+    echo TIGERVNC_VERSION=$TIGERVNC_VERSION && \
+    wget -qO- https://dl.bintray.com/tigervnc/stable/tigervnc-$TIGERVNC_VERSION.x86_64.tar.gz | tar xz --strip 1 --no-same-owner --no-same-permissions -C / && \
     mkdir -p $NO_VNC_HOME/utils/websockify && \
     wget -qO- https://github.com/novnc/noVNC/archive/v1.0.0.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME && \
     wget -qO- https://github.com/novnc/websockify/archive/v0.6.1.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
