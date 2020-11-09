@@ -80,7 +80,7 @@ RUN apt-get update && \
     NOVNC_VERSION=$(curl -s https://github.com/novnc/novnc/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev) && \
     echo NOVNC_VERSION=$NOVNC_VERSION && \
     wget -qO- https://github.com/novnc/noVNC/archive/$NOVNC_VERSION.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME && \
-    WEBSOCKIFY_VERSION=$(curl -s https://github.com/novnc/novnc/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev) && \
+    WEBSOCKIFY_VERSION=$(curl -s https://github.com/novnc/websockify/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev) && \
     echo WEBSOCKIFY_VERSION=$WEBSOCKIFY_VERSION && \
     wget -qO- https://github.com/novnc/websockify/archive/$WEBSOCKIFY_VERSION.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
     chmod +x -v $NO_VNC_HOME/utils/*.sh && \
