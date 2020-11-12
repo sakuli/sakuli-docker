@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Feature: Redirect log output to stdout in container by default [(#70)](https://github.com/sakuli/sakuli-docker/issues/70)
 - Enhancement: Create separate sakuli docker base image [(#77)](https://github.com/sakuli/sakuli-docker/issues/77)
 - Enhancement: Merge Sakuli logs instead of overwriting them [(#88)](https://github.com/sakuli/sakuli-docker/issues/88)
+- Enhancement: Update 3rd party packages automatically  [(#80)](https://github.com/sakuli/sakuli-docker/issues/80)
 
 ## v2.4.0-2
 

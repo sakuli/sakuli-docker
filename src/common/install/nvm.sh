@@ -2,7 +2,9 @@
 ### every exit != 0 fails the script
 set -e
 
-wget -qO- https://raw.githubusercontent.com/creationix/nvm/v0.34.0/install.sh | bash
+NVM_VERSION=$(curl -s https://github.com/nvm-sh/nvm/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev)
+echo NVM_VERSION=$NVM_VERSION
+wget -qO- https://raw.githubusercontent.com/creationix/nvm/$NVM_VERSION/install.sh | bash
 
 echo 'export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
