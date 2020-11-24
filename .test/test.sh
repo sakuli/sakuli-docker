@@ -40,7 +40,7 @@ docker run \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     -e GIT_URL=https://github.com/sakuli/sakuli.git \
-    -e GIT_CONTEXT_DIR=packages/e2e/e2e-suite \
+    -e GIT_CONTEXT_DIR=packages/e2e/ \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
 
