@@ -2,7 +2,7 @@
 
 set -ex
 
-NODE_VERSION=${1:-lts/erbium}
+NODE_VERSION=${1:-lts/fermium}
 
 echo "node version: $NODE_VERSION"
 
