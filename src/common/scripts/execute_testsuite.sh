@@ -95,6 +95,12 @@ if [ -f "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/package.json" ]; then
 else
   pushd ${SAKULI_EXECUTION_DIR}
 fi
+
+if [[ $INSTALL_PACKAGES == true ]]; then
+  echo -e "\n\n------------------ INSTALLING PACKAGES ------------------"
+  npm i --no-package-lock
+fi
+
 # unknown option ==> call command
 echo -e "\n\n------------------ EXECUTE SAKULI ------------------"
 echo "Executing command: '$@'"
