@@ -93,3 +93,13 @@ docker run \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
 
+# install 3rd party packages before executing Sakuli
+docker run \
+    --rm \
+    -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
+    -e SAKULI_TEST_SUITE=/sakuli-project/e2e-puppeteer \
+    -e INSTALL_PACKAGES=true \
+    -v $(pwd)/e2e:/sakuli-project \
+    --shm-size=2G \
+    taconsol/sakuli:${1:-latest}
+
