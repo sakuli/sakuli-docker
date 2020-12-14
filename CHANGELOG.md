@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 - Enhancement: Merge Sakuli logs instead of overwriting them [(#88)](https://github.com/sakuli/sakuli-docker/issues/88)
 - Enhancement: Update 3rd party packages automatically  [(#80)](https://github.com/sakuli/sakuli-docker/issues/80)
 - Maintenance: Use node 14 in container  [(#82)](https://github.com/sakuli/sakuli-docker/issues/82)
+- Feature: Enable package installation [(#48)](https://github.com/sakuli/sakuli-docker/issues/48)
 - Enhancement: Link log files instead of copying them [(#98)](https://github.com/sakuli/sakuli-docker/issues/98)
 
 ## v2.4.0-2
