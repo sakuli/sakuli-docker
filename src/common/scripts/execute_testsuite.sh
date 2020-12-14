@@ -43,6 +43,20 @@ syncToExecutionDir(){
   fi
 }
 
+linkLogFolder(){
+  SOURCE_LOG_FOLDER=${1}
+  TARGET_LOG_FOLDER=${2}
+
+  if [[ ! -d "${SOURCE_LOG_FOLDER}" ]]; then
+    logDebug "Could not find log folder '${SOURCE_LOG_FOLDER}' in mounted test suite. Trying to create it..."
+    mkdir "${SOURCE_LOG_FOLDER}"
+  fi
+
+  if [[ -d "${SOURCE_LOG_FOLDER}" ]]; then
+    ln ${LINKING_OPTIONS} "${SOURCE_LOG_FOLDER}" "${TARGET_LOG_FOLDER}"
+  fi
+}
+
 ### Main
 SAKULI_SUITE_NAME=""
 
@@ -66,29 +80,25 @@ fi
 logDebug "Linking global node_modules from ${GLOBAL_NODE_MODULES_PATH} to ${SAKULI_EXECUTION_DIR}."
 ln ${LINKING_OPTIONS} ${GLOBAL_NODE_MODULES_PATH} ${SAKULI_EXECUTION_DIR}/node_modules
 
+# exit != 0 does not abort script execution anymore
+set +e
 
 ## Linking _logs folder
 if [ -z "$GIT_URL" ]; then
   logDebug "Linking logs and screenshots from ${SAKULI_TEST_SUITE} to ${SAKULI_EXECUTION_DIR}"
   pushd "${SAKULI_EXECUTION_DIR}"
   if isTestSuite "${SAKULI_SUITE_NAME}"; then
-    if [[ -d "${SAKULI_TEST_SUITE}/_logs" ]]; then
-      ln ${LINKING_OPTIONS} "${SAKULI_TEST_SUITE}/_logs" "./${SAKULI_SUITE_NAME}/_logs"
-    fi
+    linkLogFolder "${SAKULI_TEST_SUITE}/_logs" "./${SAKULI_SUITE_NAME}/_logs"
   else
     SUITES=$(ls -d */)
     for SUITE in ${SUITES}; do
-      if [[ -d "${SAKULI_TEST_SUITE}/${SUITE}/_logs/" ]]; then
-        ln ${LINKING_OPTIONS} "${SAKULI_TEST_SUITE}/${SUITE}/_logs" "./${SUITE}/_logs"
+      if isTestSuite "${SUITE}"; then
+        linkLogFolder "${SAKULI_TEST_SUITE}/${SUITE}/_logs/" "./${SUITE}/_logs"
       fi
     done
   fi
   popd
 fi
-
-
-# exit != 0 does not abort script execution anymore
-set +e
 
 SAKULI_RETURN_CODE=1
 if [ -f "${SAKULI_EXECUTION_DIR}/${SAKULI_SUITE_NAME}/package.json" ]; then
