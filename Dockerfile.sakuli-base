@@ -1,6 +1,6 @@
 # This Dockerfile is used to build an headles vnc image based on Ubuntu
 # Used to run CI jobs for nut.js
-ARG BASE_IMAGE_VERSION=18.04
+ARG BASE_IMAGE_VERSION=20.04
 FROM ubuntu:$BASE_IMAGE_VERSION
 
 ARG NODE_VERSION
@@ -68,7 +68,10 @@ RUN apt-get update && \
                     curl \
                     iputils-ping \
                     iputils-tracepath \
-                    dnsutils && \
+                    dnsutils \
+                    tesseract-ocr \
+                    tesseract-ocr-deu \
+                    tesseract-ocr-eng && \
     apt-get clean -y && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
