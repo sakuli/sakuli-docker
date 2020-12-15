@@ -60,6 +60,12 @@ package:
     installed: true
   dnsutils:
     installed: true
+  tesseract-ocr:
+    installed: true
+  tesseract-ocr-deu:
+    installed: true
+  tesseract-ocr.eg:
+    installed: true
 port:
   tcp:5901:
     listening: true
