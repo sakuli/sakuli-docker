@@ -60,7 +60,6 @@ RUN apt-get update && \
                     firefox-geckodriver \
                     openbox \
                     obconf \
-                    obmenu \
                     xterm \
                     x11-xkb-utils \
                     libnss-wrapper \
