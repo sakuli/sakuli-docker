@@ -9,6 +9,7 @@ dgoss run \
 # standard use case
 docker run \
     --rm \
+    -it \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     -e SAKULI_TEST_SUITE=/sakuli-project/e2e-suite \
     -v $(pwd)/e2e:/sakuli-project \
@@ -18,6 +19,7 @@ docker run \
 # standard use case in DEBUG mode
 docker run \
     --rm \
+    -it \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     -e SAKULI_TEST_SUITE=/sakuli-project/e2e-suite \
     -e DEBUG=true \
@@ -28,6 +30,7 @@ docker run \
 # use case with altered user and group
 docker run \
     --rm \
+    -it \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     -e SAKULI_TEST_SUITE=/sakuli-project/e2e-suite \
     -v $(pwd)/e2e:/sakuli-project \
@@ -38,6 +41,7 @@ docker run \
 # git clone use case
 docker run \
     --rm \
+    -it \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     -e GIT_URL=https://github.com/sakuli/sakuli.git \
     -e GIT_CONTEXT_DIR=packages/e2e/ \
@@ -48,6 +52,7 @@ docker run \
 set +e
 docker run \
     --rm \
+    -it \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     -e SAKULI_TEST_SUITE=/sakuli-project/e2e-broken \
     -v $(pwd)/e2e:/sakuli-project \
@@ -60,6 +65,7 @@ set -e
 set +e
 docker run \
     --rm \
+    -it \
     -e SAKULI_TEST_SUITE=/sakuli-project/e2e-broken \
     -v $(pwd)/e2e:/sakuli-project \
     --shm-size=2G \
@@ -69,6 +75,7 @@ set -e
 
 # start another command than sakuli
 docker run \
+    -it \
     --rm \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     --shm-size=2G \
@@ -78,6 +85,7 @@ docker run \
 # start with different user and another command than sakuli
 docker run \
     --rm \
+    -it \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     --shm-size=2G \
     -u 45678:12345 \
@@ -87,6 +95,7 @@ docker run \
 # start with project referenced in SAKULI_TEST_SUITE
 docker run \
     --rm \
+    -it \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     -e SAKULI_TEST_SUITE=/sakuli-project \
     -v $(pwd)/e2e:/sakuli-project \
@@ -96,6 +105,7 @@ docker run \
 # install 3rd party packages before executing Sakuli
 docker run \
     --rm \
+    -it \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     -e SAKULI_TEST_SUITE=/sakuli-project/e2e-puppeteer \
     -e INSTALL_PACKAGES=true \
@@ -106,6 +116,7 @@ docker run \
 # OCR run
 docker run \
     --rm \
+    -it \
     -e SAKULI_LICENSE_KEY=${SAKULI_LICENSE_KEY} \
     -e SAKULI_TEST_SUITE=/sakuli-project/e2e-ocr \
     -v $(pwd)/e2e:/sakuli-project \
