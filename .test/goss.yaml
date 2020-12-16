@@ -64,7 +64,7 @@ package:
     installed: true
   tesseract-ocr-deu:
     installed: true
-  tesseract-ocr.eg:
+  tesseract-ocr-eng:
     installed: true
 port:
   tcp:5901:
