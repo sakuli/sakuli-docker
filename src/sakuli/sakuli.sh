@@ -24,6 +24,9 @@ do
     npm i -g -E @sakuli/forwarder-$fwd@$1
 done
 
+echo "Installing Sakuli OCR v$1"
+npm i -g -E @sakuli/ocr@$1
+
 echo "Installing TypeScript v3.8.3"
 npm i -g -E typescript@3.8.3
 

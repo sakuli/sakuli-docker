@@ -60,6 +60,8 @@ package:
     installed: true
   dnsutils:
     installed: true
+  tesseract:
+    installed: true
 port:
   tcp:5901:
     listening: true
@@ -86,3 +88,14 @@ command:
     exec: "echo ${LOG_MODE}"
     stdout:
       - "/^ci$/"
+  tesseract-languages:
+    exit-status: 0
+    exec: "tesseract --list-langs"
+    stdout:
+      - "deu"
+      - "eng"
+  tesseract-version:
+    exit-status: 0
+    exec: "tesseract -v"
+    stdout:
+      - "tesseract 4.1.1"

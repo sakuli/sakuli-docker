@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
 - Maintenance: Use node 14 in container  [(#82)](https://github.com/sakuli/sakuli-docker/issues/82)
 - Feature: Enable package installation [(#48)](https://github.com/sakuli/sakuli-docker/issues/48)
 - Enhancement: Link log files instead of copying them [(#98)](https://github.com/sakuli/sakuli-docker/issues/98)
+- Feature: Add ocr module to docker [(sakuli/sakuli-ocr#7)](https://github.com/sakuli/sakuli-ocr/issues/7)
 
 ## v2.4.0-2
 

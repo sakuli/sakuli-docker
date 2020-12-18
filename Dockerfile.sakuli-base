@@ -27,7 +27,8 @@ ENV REFRESHED_AT=${BUILD_DATE} \
     VNC_RESOLUTION=1280x1024 \
     VNC_PW=vncpassword \
     VNC_VIEW_ONLY=false \
-    IMG=taconsol/sakuli-base
+    IMG=taconsol/sakuli-base \
+    TESSDATA_PREFIX=/usr/local/share/tessdata
 
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
@@ -36,6 +37,9 @@ WORKDIR $HOME
 ### Copy all install scripts for further steps
 COPY ./src/common/install/ $INST_SCRIPTS/
 RUN find $INST_SCRIPTS -name '*.sh' -exec chmod a+x {} +
+
+### Copy tesseract
+COPY ./src/tesseract /tmp/tesseract
 
 ### Install required packages and add configuration
 RUN apt-get update && \
@@ -68,7 +72,13 @@ RUN apt-get update && \
                     curl \
                     iputils-ping \
                     iputils-tracepath \
-                    dnsutils && \
+                    dnsutils \
+                    libleptonica-dev \
+                    libpng-dev \
+                    libjpeg8-dev \
+                    libtiff5-dev \
+                    zlib1g-dev \
+                    libtool && \
     apt-get clean -y && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
@@ -84,7 +94,11 @@ RUN apt-get update && \
     chmod +x -v $NO_VNC_HOME/utils/*.sh && \
     ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html && \
     ln -s /usr/bin/chromium-browser /usr/bin/google-chrome && \
-    echo "CHROMIUM_FLAGS='--no-sandbox --user-data-dir'" > $HOME/.chromium-browser.init
+    echo "CHROMIUM_FLAGS='--no-sandbox --user-data-dir'" > $HOME/.chromium-browser.init && \
+    dpkg -i /tmp/tesseract/tesseract_4.1.1-1_amd64.deb && \
+    ldconfig && \
+    cp /tmp/tesseract/*traineddata /usr/local/share/tessdata && \
+    rm -rf /tmp/tesseract
 
 COPY ./src/common/wm/ $HOME/
 COPY ./src/common/config/openbox /etc/xdg/openbox
