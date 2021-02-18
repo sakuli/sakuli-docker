@@ -27,8 +27,8 @@ done
 echo "Installing Sakuli OCR v$1"
 npm i -g -E @sakuli/ocr@$1
 
-echo "Installing TypeScript v3.8.3"
-npm i -g -E typescript@3.8.3
+echo "Installing TypeScript v4.1.3"
+npm i -g -E typescript@4.1.3
 
 echo "Configuring .npmrc"
 echo "//registry.npmjs.org/:_authToken=\${NPM_TOKEN}" > $HOME/.npmrc
