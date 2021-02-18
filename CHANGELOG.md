@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
 - Enhancement: Link log files instead of copying them [(#98)](https://github.com/sakuli/sakuli-docker/issues/98)
 - Feature: Add ocr module to docker [(sakuli/sakuli-ocr#7)](https://github.com/sakuli/sakuli-ocr/issues/7)
 - Maintenance: Update TigerVNC to latest version [(#95)](https://github.com/sakuli/sakuli-docker/issues/95)
+- Maintenance: update typescript to match sakuli version [(#104)](https://github.com/sakuli/sakuli-docker/issues/104)
 
 ## v2.4.0-2
 
