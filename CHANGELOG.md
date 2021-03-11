@@ -2,7 +2,7 @@
 
 All notable changes to this project will be documented in this file.
 
-## Upcoming Release
+## v2.5.0
 
 - Enhancement: Add ip-utils and curl for debugging purposes [(#79)](https://github.com/sakuli/sakuli-docker/issues/79)
 - Feature: Redirect log output to stdout in container by default [(#70)](https://github.com/sakuli/sakuli-docker/issues/70)
