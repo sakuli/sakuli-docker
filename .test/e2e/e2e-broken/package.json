@@ -1,6 +1,6 @@
 {
   "name": "e2e-broken",
-  "version": "2.3.0",
+  "version": "2.5.0",
   "description": "A broken e2e test suite :-/",
   "private": true,
   "contributors": [
