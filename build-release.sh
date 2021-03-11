@@ -18,5 +18,5 @@ docker build \
 
 cd ./.test/
 chmod u+x test.sh
-./test.sh
+./test.sh ${SAKULI_VERSION}
 cd -
