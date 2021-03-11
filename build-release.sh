@@ -2,7 +2,7 @@
 
 set -ex
 
-SAKULI_VERSION=${1:-2.4.0}
+SAKULI_VERSION=${1:-2.5.0}
 NPM_TOKEN=${2:-549ada59-bb56-4c22-ac54-1d3ec05d6a4d}
 
 echo "Sakuli version: $SAKULI_VERSION"
