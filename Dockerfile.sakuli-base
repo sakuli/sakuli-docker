@@ -83,9 +83,9 @@ RUN apt-get update && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
     locale-gen en_US.UTF-8 && \
-    TIGERVNC_VERSION=$(curl -s https://dl.bintray.com/tigervnc/stable/ | grep x86_64.tar.gz | grep -v debug | cut -f2 -d - | cut -f1-3 -d. | sort -V -r | head -n 1) && \
+    TIGERVNC_VERSION=$(curl -s -H "Accept: application/vnd.github.v3+json" https://api.github.com/repos/TigerVNC/tigervnc/releases/latest | grep "tag_name" | cut -d ":" -f 2 | cut -d "\"" -f 2 | cut -d "v" -f 2) && \
     echo TIGERVNC_VERSION=$TIGERVNC_VERSION && \
-    wget -qO- https://dl.bintray.com/tigervnc/stable/tigervnc-$TIGERVNC_VERSION.x86_64.tar.gz | tar xz --strip 1 --no-same-owner --no-same-permissions -C / && \
+    wget -qO- https://sourceforge.net/projects/tigervnc/files/stable/$TIGERVNC_VERSION/tigervnc-$TIGERVNC_VERSION.x86_64.tar.gz | tar xz --strip 1 --no-same-owner --no-same-permissions -C / && \
     mkdir -p $NO_VNC_HOME/utils/websockify && \
     NOVNC_VERSION=$(curl -s https://github.com/novnc/novnc/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev) && \
     echo NOVNC_VERSION=$NOVNC_VERSION && \
