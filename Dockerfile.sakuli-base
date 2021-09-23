@@ -113,6 +113,7 @@ COPY ./src/common/env/ $STARTUPDIR/env
 
 COPY ./src/common/firefox_profile/certificate-profile $HOME/firefox-certificates/
 COPY ./src/common/chrome_certificate_store/ $HOME/.pki/
+RUN mkdir -m 777 /headless/.config
 
 RUN $INST_SCRIPTS/set_user_permission.sh $HOME
 
