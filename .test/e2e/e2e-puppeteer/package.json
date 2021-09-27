@@ -1,6 +1,6 @@
 {
   "name": "e2e-puppeteer",
-  "version": "2.5.0",
+  "version": "2.5.1",
   "description": "An e2e test with a 3rd party package",
   "private": true,
   "contributors": [
