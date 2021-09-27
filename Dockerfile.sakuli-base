@@ -79,7 +79,11 @@ RUN apt-get update && \
                     libjpeg8-dev \
                     libtiff5-dev \
                     zlib1g-dev \
-                    libtool && \
+                    libtool \
+                    software-properties-common && \
+    add-apt-repository ppa:ubuntu-toolchain-r/test && \
+    apt update && \
+    apt install -y gcc-9 libstdc++6 && \
     apt-get clean -y && \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/* && \
