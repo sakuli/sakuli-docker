@@ -80,7 +80,8 @@ RUN apt-get update && \
                     libtiff5-dev \
                     zlib1g-dev \
                     libtool \
-                    software-properties-common && \
+                    software-properties-common \
+                    xinit && \
     add-apt-repository ppa:ubuntu-toolchain-r/test && \
     apt update && \
     apt install -y gcc-9 libstdc++6 && \
@@ -99,7 +100,6 @@ RUN apt-get update && \
     WEBSOCKIFY_VERSION=$(curl -s https://github.com/novnc/websockify/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev) && \
     echo WEBSOCKIFY_VERSION=$WEBSOCKIFY_VERSION && \
     wget -qO- https://github.com/novnc/websockify/archive/$WEBSOCKIFY_VERSION.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
-    chmod +x -v $NO_VNC_HOME/utils/*.sh && \
     ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html && \
     ln -s /usr/bin/chromium-browser /usr/bin/google-chrome && \
     echo "CHROMIUM_FLAGS='--no-sandbox --user-data-dir'" > $HOME/.chromium-browser.init && \
