@@ -31,8 +31,6 @@ jobs:
       run: |
         ./build-base.sh
         ./build-latest.sh $SAKULI_VERSION ${{ secrets.NPM_TOKEN }}
-      env:
-        SAKULI_LICENSE_KEY: ${{ secrets.SAKULI_LICENSE_KEY }}
     - name: Login to Dockerhub
       run: docker login -u ${{ secrets.DOCKER_USER }} -p "${{ secrets.DOCKER_PASSWORD }}"
     - name: Publish image
