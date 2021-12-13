@@ -53,7 +53,7 @@ set -e
 # should not fail if license is provided
 docker run \
     --rm \
-    -e SAKULI_TEST_SUITE=/sakuli-project/e2e-broken \
+    -e SAKULI_TEST_SUITE=/sakuli-project/e2e-suite \
     -e SAKULI_LICENSE_KEY="asdf42#0815" \
     -v $(pwd)/e2e:/sakuli-project \
     --shm-size=2G \
