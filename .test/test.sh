@@ -54,7 +54,7 @@ set -e
 docker run \
     --rm \
     -e SAKULI_TEST_SUITE=/sakuli-project/e2e-broken \
-    -e SAKULI_LICENSE_KEY="asdf42#0815"
+    -e SAKULI_LICENSE_KEY="asdf42#0815" \
     -v $(pwd)/e2e:/sakuli-project \
     --shm-size=2G \
     taconsol/sakuli:${1:-latest}
