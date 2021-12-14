@@ -5,8 +5,6 @@ set -e
 # should also source $STARTUPDIR/generate_container_user
 source $HOME/.bashrc
 
-node $STARTUPDIR/env/startup.js
-
 ## correct forwarding of shutdown signal
 cleanup () {
     kill -s SIGTERM $!

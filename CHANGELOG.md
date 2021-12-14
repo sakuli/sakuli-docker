@@ -2,6 +2,9 @@
 
 All notable changes to this project will be documented in this file.
 
+### next
+- Open Source [(#111)](https://github.com/sakuli/sakuli-docker/issues/111)
+
 ### 2.5.1
 - security fixes
 - Enhancement: german locale [(#108)](https://github.com/sakuli/sakuli-docker/issues/108)
