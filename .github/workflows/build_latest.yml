@@ -16,7 +16,7 @@ jobs:
     - name: Setup Node.js environment
       uses: actions/setup-node@v2.1.2
       with:
-        node-version: '14'
+        node-version: '16'
     - name: Install goss and dgoss
       run: |
         curl -L https://github.com/aelsabbahy/goss/releases/latest/download/goss-linux-amd64 -o $HOME/goss
