@@ -3,6 +3,9 @@
 All notable changes to this project will be documented in this file.
 
 ### next
+
+
+### 3.0.0
 - Maintenance: Open Source [(#111)](https://github.com/sakuli/sakuli-docker/issues/111)
 - Maintenance: Use node 16 in container
 
