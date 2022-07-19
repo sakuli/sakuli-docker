@@ -94,10 +94,10 @@ RUN apt-get update && \
     echo TIGERVNC_VERSION=$TIGERVNC_VERSION && \
     wget -qO- https://sourceforge.net/projects/tigervnc/files/stable/$TIGERVNC_VERSION/tigervnc-$TIGERVNC_VERSION.x86_64.tar.gz | tar xz --strip 1 --no-same-owner --no-same-permissions -C / && \
     mkdir -p $NO_VNC_HOME/utils/websockify && \
-    NOVNC_VERSION=$(curl -s https://github.com/novnc/novnc/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev) && \
+    NOVNC_VERSION=$(curl -s https://api.github.com/repos/novnc/novnc/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') && \
     echo NOVNC_VERSION=$NOVNC_VERSION && \
     wget -qO- https://github.com/novnc/noVNC/archive/$NOVNC_VERSION.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME && \
-    WEBSOCKIFY_VERSION=$(curl -s https://github.com/novnc/websockify/releases/latest | cut -f8 -d/ | cut -f1 -d\> | rev | cut -c2- | rev) && \
+    WEBSOCKIFY_VERSION=$(curl -s https://api.github.com/repos/novnc/websockify/releases/latest | grep '"tag_name":' | sed -E 's/.*"([^"]+)".*/\1/') && \
     echo WEBSOCKIFY_VERSION=$WEBSOCKIFY_VERSION && \
     wget -qO- https://github.com/novnc/websockify/archive/$WEBSOCKIFY_VERSION.tar.gz | tar xz --strip 1 -C $NO_VNC_HOME/utils/websockify && \
     ln -s $NO_VNC_HOME/vnc_lite.html $NO_VNC_HOME/index.html && \
