@@ -3,7 +3,7 @@
 All notable changes to this project will be documented in this file.
 
 ### next
-
+- Maintenance: Update browsers
 
 ### 3.0.0
 - Maintenance: Open Source [(#111)](https://github.com/sakuli/sakuli-docker/issues/111)
