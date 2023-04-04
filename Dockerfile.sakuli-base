@@ -129,3 +129,4 @@ USER 1000:1000
 
 ### Install nvm
 RUN $INST_SCRIPTS/nvm.sh $NODE_VERSION
+RUN chmod 777 /headless/.npm && mkdir -m 777 /headless/.mozilla
