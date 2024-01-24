@@ -2,9 +2,10 @@
 
 All notable changes to this project will be documented in this file.
 
-### next
+### 3.0.0-1
 - Maintenance: Update browsers
 - Maintenance: Update packages
+- Bugfix: NPM cache permission issue
 
 ### 3.0.0
 - Maintenance: Open Source [(#111)](https://github.com/sakuli/sakuli-docker/issues/111)
