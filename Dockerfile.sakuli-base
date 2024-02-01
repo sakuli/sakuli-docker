@@ -29,7 +29,7 @@ ENV REFRESHED_AT=${BUILD_DATE} \
     VNC_VIEW_ONLY=false \
     IMG=taconsol/sakuli-base \
     TESSDATA_PREFIX=/usr/local/share/tessdata \
-    npm_config_cache=/headless/.npm_cache
+    npm_config_cache=/headless/Documents
 
 EXPOSE $VNC_PORT $NO_VNC_PORT
 
